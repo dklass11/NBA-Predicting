@@ -10,5 +10,5 @@ for team in teams:
     print(team.name)
     print(team.games_played)
 
-games_today = Boxscores(datetime.today())
+games_today = Boxscores(datetime(2020, 1, 5))
 print(games_today.games)
