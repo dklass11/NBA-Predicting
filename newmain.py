@@ -93,24 +93,32 @@ for date in schedule_date_counts:
             
             date_counter = 1
 
+home_five_team_uri = list()
+
 def boxscore_uri_creator(game_dates):
     for date in game_dates:
         if 'Oct' in date:
-            month = 10
+            month = '10'
         elif 'Nov' in date:
-            month = 11
+            month = '11'
         elif 'Dec' in date:
-            month = 12
+            month = '12'
         elif 'Jan' in date:
-            month = 01
+            month = '01'
         elif 'Feb' in date:
-            month = 02
+            month = '02'
         elif 'Mar' in date:
-            month = 03
+            month = '03'
         elif 'Apr' in date:
-            month = 04
+            month = '04'
 
         if date[10] is not ',':
-            day = int(date[9:11])
+            day = date[9:11]
         else:
-            day += int(date[9])
+            day = date[9]
+
+        home_five_team_uri.append('2020' + month + day + '0' + home_team)
+
+boxscore_uri_creator(home_game_date_list)
+
+print(home_five_team_uri)
