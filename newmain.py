@@ -10,7 +10,6 @@ from keras.layers import Dense
 import datetime
 from sportsreference.nba.teams import Teams
 from sportsreference.nba.boxscore import Boxscore
-from sportsreference.nba.boxscore import Boxscores
 from sportsreference.nba.schedule import Schedule
 
 # get home team's metrics
@@ -25,6 +24,7 @@ for game in home_team_schedule:
 def dateconverter1(date):
     count = 0
 
+    # convert month to number of days
     if 'Oct' in date:
         count = 0
     elif 'Nov' in date:
@@ -36,10 +36,11 @@ def dateconverter1(date):
     elif 'Feb' in date:
         count = 123
     elif 'Mar' in date:
-        count = 152 # for leap year only
+        count = 152 # for this leap year only
     elif 'Apr' in date:
         count = 183
- 
+
+    # find and add number of days
     if date[10] is not ',':
         count += int(date[9:11])
     else:
@@ -51,6 +52,7 @@ def dateconverter1(date):
 def dateconverter2(date):
     count = 0
 
+    # convert month to number of days
     if date[5:7] == '10':
         count = 0
     elif date[5:7] == '11':
@@ -66,37 +68,42 @@ def dateconverter2(date):
     elif date[5:7] == '04':
         count = 183
 
+    # find and add number of days
     count += int(date[8:10])
 
     return count
 
 # run schedulate dates through converter
-schedule_date_counts = list()
+home_schedule_date_counts = list()
 
 for date in home_team_dates:
-    schedule_date_counts.append(dateconverter1(date))
+    home_schedule_date_counts.append(dateconverter1(date))
 
 # run current date through converter
 current_date_count = dateconverter2(str(datetime.date.today()))
 
 # compare dates and find previous five game dates
 home_game_date_list = list()
-date_counter = 0
+home_date_counter = 0
 
-for date in schedule_date_counts:
-    if date_counter == 0:
+for date in home_schedule_date_counts:
+    if home_date_counter == 0:
         if current_date_count <= date:
-            position = schedule_date_counts.index(date)
+            position = home_schedule_date_counts.index(date)
 
             home_game_date_list = home_team_dates[::-1]
-            home_game_date_list = home_game_date_list[(82-position):((82-position)+5)]
+            home_game_date_list = home_game_date_list[(82-position):((82-position)+6)]
             
-            date_counter = 1
+            home_date_counter = 1
 
+# use last five game dates to find uri's
 home_five_team_uri = list()
+month = 0
+day = 0 
 
-def boxscore_uri_creator(game_dates):
+def home_boxscore_uri_creator(game_dates):
     for date in game_dates:
+        # convert month to numeric value
         if 'Oct' in date:
             month = '10'
         elif 'Nov' in date:
@@ -112,13 +119,27 @@ def boxscore_uri_creator(game_dates):
         elif 'Apr' in date:
             month = '04'
 
+        # find and pull day number
         if date[10] is not ',':
             day = date[9:11]
         else:
-            day = date[9]
+            day = "0" + date[9]
 
-        home_five_team_uri.append('2020' + month + day + '0' + home_team)
+        # add each uri to list
+        home_five_team_uri.append('2020' + month + day + '0' + home_team) # for this year only
 
-boxscore_uri_creator(home_game_date_list)
+home_boxscore_uri_creator(home_game_date_list)
 
-print(home_five_team_uri)
+team_abbrev = list('ATL', 'BKN', 'BOS', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
+                'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHX', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS')
+
+for uri in home_five_team_uri:
+    test_game = Boxscore(uri)
+    try:
+        variable = test_game.winner
+    except:
+        for abbrev in team_abbrev:
+            uri = ('2020' + month + day + '0' + abbrev)
+            try:
+                test_game = Boxscore(uri)
+
