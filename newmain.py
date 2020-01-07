@@ -100,3 +100,6 @@ for position in home_team_five_pos:
     home_team_five_indexes.append(home_team_indexes[position])
 
 print(home_team_five_indexes)
+
+for index in home_team_five_indexes:
+    pass
