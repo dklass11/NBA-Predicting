@@ -14,7 +14,7 @@ from sportsreference.nba.boxscore import Boxscores
 from sportsreference.nba.schedule import Schedule
 
 # get home team's metrics
-home_team = "LAL"
+home_team = "PHI"
 home_team_schedule = Schedule(home_team)
 home_team_dates = list()
 
@@ -80,8 +80,8 @@ for date in home_team_dates:
 current_date_count = dateconverter2(str(datetime.date.today()))
 
 # compare dates and find previous five game dates
-date_counter = 0
 home_game_date_list = list()
+date_counter = 0
 
 for date in schedule_date_counts:
     if date_counter == 0:
@@ -90,5 +90,27 @@ for date in schedule_date_counts:
 
             home_game_date_list = home_team_dates[::-1]
             home_game_date_list = home_game_date_list[(82-position):((82-position)+5)]
-
+            
             date_counter = 1
+
+def boxscore_uri_creator(game_dates):
+    for date in game_dates:
+        if 'Oct' in date:
+            month = 10
+        elif 'Nov' in date:
+            month = 11
+        elif 'Dec' in date:
+            month = 12
+        elif 'Jan' in date:
+            month = 01
+        elif 'Feb' in date:
+            month = 02
+        elif 'Mar' in date:
+            month = 03
+        elif 'Apr' in date:
+            month = 04
+
+        if date[10] is not ',':
+            day = int(date[9:11])
+        else:
+            day += int(date[9])

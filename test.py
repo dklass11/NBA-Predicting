@@ -26,4 +26,3 @@ for i in phila_schedule:
 game2018 = Boxscore('201810160BOS')
 
 print(game2018.winner)
-
