@@ -40,7 +40,7 @@ def dateconverter(date):
     elif date[5:7] == '04':
         count = 183
 
-    # find and add number of days
+    # add number of days to count
     count += int(date[8:10])
 
     return count
@@ -67,11 +67,12 @@ def indexconverter(index):
     elif index[4:6] == '04':
         count = 183
 
-    # find and add number of days
+    # add number of days to count
     count += int(index[6:8])
 
     return count
 
+# run indexes through converter
 home_team_index_counts = list()
 
 for i in home_team_indexes:
@@ -85,11 +86,14 @@ for count in home_team_index_counts:
         if current_date_count <= count:
             position = home_team_index_counts.index(count)
 
+            # use index counts to find positions of Boxscore indexes
+
             home_team_five_index_counts = home_team_index_counts[::-1]
             home_team_five_index_counts = home_team_five_index_counts[(82-position):((82-position)+5)]
 
             home_index_counter = 1
 
+# use index counts to find positions of Boxscore indexes
 home_team_five_pos = list()
 home_team_five_indexes = list()
 
@@ -99,7 +103,9 @@ for index_count in home_team_five_index_counts:
 for position in home_team_five_pos:
     home_team_five_indexes.append(home_team_indexes[position])
 
-print(home_team_five_indexes)
-
-for index in home_team_five_indexes:
-    pass
+# store each Boxscore
+first_game = Boxscore(home_team_five_indexes[0])
+second_game = Boxscore(home_team_five_indexes[1])
+third_game = Boxscore(home_team_five_indexes[2])
+fourth_game = Boxscore(home_team_five_indexes[3])
+fifth_game = Boxscore(home_team_five_indexes[4])
