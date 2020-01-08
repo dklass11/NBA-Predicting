@@ -256,11 +256,11 @@ target1_five_games_df = target1_five_games_df.append(third_game_df, ignore_index
 target1_five_games_df = target1_five_games_df.append(fourth_game_df, ignore_index=True)
 target1_five_games_df = target1_five_games_df.append(fifth_game_df, ignore_index=True)
 
-target1_game_1_df_w = first_game.dataframe[['winning_abbr']]
-target1_game_2_df_w = second_game.dataframe[['winning_abbr']]
-target1_game_3_df_w = third_game.dataframe[['winning_abbr']]
-target1_game_4_df_w = fourth_game.dataframe[['winning_abbr']]
-target1_game_5_df_w = fifth_game.dataframe [['winning_abbr']]
+target1_five_games_df_w = first_game.dataframe[['winning_abbr']]
+target1_five_games_df_w = target1_five_games_df_w.append(second_game.dataframe[['winning_abbr']], ignore_index=True)
+target1_five_games_df_w = target1_five_games_df_w.append(third_game.dataframe[['winning_abbr']], ignore_index=True)
+target1_five_games_df_w = target1_five_games_df_w.append(fourth_game.dataframe[['winning_abbr']], ignore_index=True)
+target1_five_games_df_w = target1_five_games_df_w.append(fifth_game.dataframe[['winning_abbr']], ignore_index=True)
 
 
 
@@ -298,8 +298,10 @@ target2_five_games_df = target2_five_games_df.append(third_game_df_2, ignore_ind
 target2_five_games_df = target2_five_games_df.append(fourth_game_df_2, ignore_index=True)
 target2_five_games_df = target2_five_games_df.append(fifth_game_df_2, ignore_index=True)
 
-target2_game_1_df_w = first_game_2.dataframe[['winning_abbr']]
-target2_game_2_df_w = second_game_2.dataframe[['winning_abbr']]
-target2_game_3_df_w = third_game_2.dataframe[['winning_abbr']]
-target2_game_4_df_w = fourth_game_2.dataframe[['winning_abbr']]
-target2_game_5_df_w = fifth_game_2.dataframe [['winning_abbr']]
+target2_five_games_df_w = first_game_2.dataframe[['winning_abbr']]
+target2_five_games_df_w = target2_five_games_df_w.append(second_game_2.dataframe[['winning_abbr']], ignore_index=True)
+target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[['winning_abbr']], ignore_index=True)
+target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winning_abbr']], ignore_index=True)
+target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winning_abbr']], ignore_index=True)
+
+print(target2_five_games_df_w)
