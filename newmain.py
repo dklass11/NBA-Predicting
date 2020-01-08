@@ -12,13 +12,14 @@ from sportsreference.nba.teams import Teams
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
-# get home team's full schedule and boxscore indexes
-home_team = "PHI"
-home_team_schedule = Schedule(home_team)
-home_team_indexes = list()
+# get target1 team's full schedule and boxscore indexes
+target1_team = 'PHI'
+target2_team = ''
+target1_team_schedule = Schedule(target1_team)
+target1_team_indexes = list()
 
-for game in home_team_schedule:
-    home_team_indexes.append(game.boxscore_index)
+for game in target1_team_schedule:
+    target1_team_indexes.append(game.boxscore_index)
 
 # convert current date to count
 def dateconverter(date):
@@ -73,39 +74,47 @@ def indexconverter(index):
     return count
 
 # run indexes through converter
-home_team_index_counts = list()
+target1_team_index_counts = list()
 
-for i in home_team_indexes:
-    home_team_index_counts.append(indexconverter(i))
+for i in target1_team_indexes:
+    target1_team_index_counts.append(indexconverter(i))
 
 # compare dates and find previous five game dates
-home_index_counter = 0
+target1_index_counter = 0
 
-for count in home_team_index_counts:
-    if home_index_counter == 0:
+for count in target1_team_index_counts:
+    if target1_index_counter == 0:
         if current_date_count <= count:
-            position = home_team_index_counts.index(count)
+            position = target1_team_index_counts.index(count)
 
             # use index counts to find positions of Boxscore indexes
 
-            home_team_five_index_counts = home_team_index_counts[::-1]
-            home_team_five_index_counts = home_team_five_index_counts[(82-position):((82-position)+5)]
+            target1_team_five_index_counts = target1_team_index_counts[::-1]
+            target1_team_five_index_counts = target1_team_five_index_counts[(82-position):((82-position)+5)]
 
-            home_index_counter = 1
+            target1_index_counter = 1
 
 # use index counts to find positions of Boxscore indexes
-home_team_five_pos = list()
-home_team_five_indexes = list()
+target1_team_five_pos = list()
+target1_team_five_indexes = list()
 
-for index_count in home_team_five_index_counts:
-    home_team_five_pos.append(home_team_index_counts.index(index_count))
+for index_count in target1_team_five_index_counts:
+    target1_team_five_pos.append(target1_team_index_counts.index(index_count))
 
-for position in home_team_five_pos:
-    home_team_five_indexes.append(home_team_indexes[position])
+for position in target1_team_five_pos:
+    target1_team_five_indexes.append(target1_team_indexes[position])
 
 # store each Boxscore
-first_game = Boxscore(home_team_five_indexes[0])
-second_game = Boxscore(home_team_five_indexes[1])
-third_game = Boxscore(home_team_five_indexes[2])
-fourth_game = Boxscore(home_team_five_indexes[3])
-fifth_game = Boxscore(home_team_five_indexes[4])
+first_game = Boxscore(target1_team_five_indexes[0])
+second_game = Boxscore(target1_team_five_indexes[1])
+third_game = Boxscore(target1_team_five_indexes[2])
+fourth_game = Boxscore(target1_team_five_indexes[3])
+fifth_game = Boxscore(target1_team_five_indexes[4])
+
+# create boolean list to show if target1 team is home
+home_list = list([False, False, False, False, False])
+
+for index in target1_team_five_indexes:
+    if target1_team in index:
+        home_list[target1_team_five_indexes.index(index)] = True
+
