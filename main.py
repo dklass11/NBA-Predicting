@@ -38,6 +38,7 @@ model0.add(Dense(100, activation='relu'))
 model0.add(Dense(100, activation='relu'))
 model0.add(Dense(1))
 
+
 # compile model
 model0.compile(optimizer='adam', loss='mean_squared_error')
 

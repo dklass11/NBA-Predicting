@@ -234,47 +234,72 @@ third_game_df = third_game.dataframe
 fourth_game_df = fourth_game.dataframe
 fifth_game_df = fifth_game.dataframe
 
-first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'home_wins', 'away_wins'])
-second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'home_wins', 'away_wins'])
-third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'home_wins', 'away_wins'])
-fourth_game_df = fourth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'home_wins', 'away_wins'])
-fifth_game_df = fifth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'home_wins', 'away_wins'])
+first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+fourth_game_df = fourth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+fifth_game_df = fifth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
 
-target1_five_games_df = first_game_df.dataframe
+target1_five_games_df = first_game_df
 target1_five_games_df = target1_five_games_df.append(second_game_df, ignore_index=True)
 target1_five_games_df = target1_five_games_df.append(third_game_df, ignore_index=True)
 target1_five_games_df = target1_five_games_df.append(fourth_game_df, ignore_index=True)
 target1_five_games_df = target1_five_games_df.append(fifth_game_df, ignore_index=True)
 
-print(target1_five_games_df)
-'''
-target1_game_1_df_w = target1_game_1_df[['winning_abbr']]
-target1_game_2_df_w = target1_game_2_df[['winning_abbr']]
-target1_game_3_df_w = target1_game_3_df[['winning_abbr']]
-target1_game_4_df_w = target1_game_4_df[['winning_abbr']]
-target1_game_5_df_w = target1_game_5_df[['winning_abbr']]
+target1_game_1_df_w = first_game.dataframe[['winning_abbr']]
+target1_game_2_df_w = second_game.dataframe[['winning_abbr']]
+target1_game_3_df_w = third_game.dataframe[['winning_abbr']]
+target1_game_4_df_w = fourth_game.dataframe[['winning_abbr']]
+target1_game_5_df_w = fifth_game.dataframe [['winning_abbr']]
 
-target1_game_1_df = target1_game_1_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target1_game_2_df = target1_game_2_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target1_game_3_df = target1_game_3_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target1_game_4_df = target1_game_4_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target1_game_5_df = target1_game_5_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
 
-target2_game_1_df = first_game_2.dataframe
-target2_game_2_df = second_game_2.dataframe
-target2_game_3_df = third_game_2.dataframe
-target2_game_4_df = fourth_game_2.dataframe
-target2_game_5_df = fifth_game_2.dataframe
 
-target2_game_1_df_w = target2_game_1_df[['winning_abbr']]
-target2_game_2_df_w = target2_game_2_df[['winning_abbr']]
-target2_game_3_df_w = target2_game_3_df[['winning_abbr']]
-target2_game_4_df_w = target2_game_4_df[['winning_abbr']]
-target2_game_5_df_w = target2_game_5_df[['winning_abbr']]
+first_game_df_2 = pd.DataFrame()
+second_game_df_2 = pd.DataFrame()
+third_game_df_2 = pd.DataFrame()
+fourth_game_df_2 = pd.DataFrame()
+fifth_game_df_2 = pd.DataFrame()
 
-target2_game_1_df = target2_game_1_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target2_game_2_df = target2_game_2_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target2_game_3_df = target2_game_3_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target2_game_4_df = target2_game_4_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-target2_game_5_df = target2_game_5_df.drop(columns=['winning_name', 'winning_abbr', 'winner', 'losing_name', 'losing_abbr', 'loser', 'home_wins', 'away_wins'])
-'''
+first_game_df_2 = first_game_2.dataframe
+second_game_df_2 = second_game_2.dataframe
+third_game_df_2 = third_game_2.dataframe
+fourth_game_df_2 = fourth_game_2.dataframe
+fifth_game_df_2 = fifth_game_2.dataframe
+
+first_game_df_2 = first_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+second_game_df_2 = second_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+third_game_df_2 = third_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+fourth_game_df_2 = fourth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+fifth_game_df_2 = fifth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+
+target2_five_games_df = first_game_df_2
+target2_five_games_df = target2_five_games_df.append(second_game_df_2, ignore_index=True)
+target2_five_games_df = target2_five_games_df.append(third_game_df_2, ignore_index=True)
+target2_five_games_df = target2_five_games_df.append(fourth_game_df_2, ignore_index=True)
+target2_five_games_df = target2_five_games_df.append(fifth_game_df_2, ignore_index=True)
+
+target2_game_1_df_w = first_game_2.dataframe[['winning_abbr']]
+target2_game_2_df_w = second_game_2.dataframe[['winning_abbr']]
+target2_game_3_df_w = third_game_2.dataframe[['winning_abbr']]
+target2_game_4_df_w = fourth_game_2.dataframe[['winning_abbr']]
+target2_game_5_df_w = fifth_game_2.dataframe [['winning_abbr']]
