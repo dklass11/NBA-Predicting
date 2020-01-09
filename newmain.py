@@ -1,11 +1,11 @@
 # import array and datframe modules
 import numpy as np
 import pandas as pd
-
+'''
 # import neural network model
 from keras.models import Sequential
 from keras.layers import Dense
-
+'''
 # import nba data fetching module
 import datetime
 from sportsreference.nba.teams import Teams
@@ -27,16 +27,22 @@ def dateconverter(date):
     # convert month to number of days
     if date[5:7] == '10':
         count = 0
+
     elif date[5:7] == '11':
         count = 31
+
     elif date[5:7] == '12':
         count = 61
+
     elif date[5:7] == '01':
         count = 92
+
     elif date[5:7] == '02':
         count = 123
+
     elif date[5:7] == '03':
         count = 152
+        
     elif date[5:7] == '04':
         count = 183
 
@@ -54,16 +60,22 @@ def indexconverter(index):
     # convert month to number of days
     if index[4:6] == '10':
         count = 0
+
     elif index[4:6] == '11':
         count = 31
+
     elif index[4:6] == '12':
         count = 61
+
     elif index[4:6] == '01':
         count = 92
+
     elif index[4:6] == '02':
         count = 123
+
     elif index[4:6] == '03':
         count = 152
+
     elif index[4:6] == '04':
         count = 183
 
@@ -133,16 +145,22 @@ def dateconverter_2(date):
     # convert month to number of days
     if date[5:7] == '10':
         count = 0
+
     elif date[5:7] == '11':
         count = 31
+
     elif date[5:7] == '12':
         count = 61
+
     elif date[5:7] == '01':
         count = 92
+
     elif date[5:7] == '02':
         count = 123
+
     elif date[5:7] == '03':
         count = 152
+
     elif date[5:7] == '04':
         count = 183
 
@@ -160,16 +178,22 @@ def indexconverter_2(index):
     # convert month to number of days
     if index[4:6] == '10':
         count = 0
+
     elif index[4:6] == '11':
         count = 31
+
     elif index[4:6] == '12':
         count = 61
+
     elif index[4:6] == '01':
         count = 92
+
     elif index[4:6] == '02':
         count = 123
+
     elif index[4:6] == '03':
         count = 152
+
     elif index[4:6] == '04':
         count = 183
 
@@ -302,73 +326,54 @@ target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[
 target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 
-target1_converted_abbr = pd.DataFrame()
+target1_five_games_df_w_l = target1_five_games_df_w.values.tolist()
+
+target1_converted_abbr_l = list()
+
+letter_number_dicionary = {'A':'01', 'B':'02', 'C':'03', 'D':'04', 'E':'05', 'F':'06', 'G':'07', 'H':'08', 'I':'09', 'J':'10', 'K':'11', 'L':'12', 'M':'13',
+                    'N':'14', 'O':'15', 'P':'16', 'Q':'17', 'R':'18', 'S':'19', 'T':'20', 'U':'21', 'V':'22', 'W':'23', 'X':'24', 'Y':'25', 'Z':'26'}
 
 def abbreviation_converter(abbreviations):
-    for abbrev in target2_five_games_df_w:
-        for letter in abbrev:
-            if letter == 'A':
-                pos = '1'
-            elif letter == 'B':
-                pos = '2'
-            elif letter == 'C':
-                pos = '3'
-            elif letter == 'D':
-                pos = '4'
-            elif letter == 'E':
-                pos = '5'
-            elif letter == 'F':
-                pos = '6'
-            elif letter == 'G':
-                pos = '7'
-            elif letter == 'H':
-                pos = '8'
-            elif letter == 'I':
-                pos = '9'
-            elif letter == 'J':
-                pos = '10'
-            elif letter == 'K':
-                pos = '11'
-            elif letter == 'L':
-                pos = '12'
-            elif letter == 'M':
-                pos = '13'
-            elif letter == 'N':
-                pos = '14'
-            elif letter == 'O':
-                pos = '15'
-            elif letter == 'P':
-                pos = '16'
-            elif letter == 'Q':
-                pos = '17'
-            elif letter == 'R':
-                pos = '18'
-            elif letter == 'S':
-                pos = '19'
-            elif letter == 'T':
-                pos = '20'
-            elif letter == 'U':
-                pos = '21'
-            elif letter == 'V':
-                pos = '22'
-            elif letter == 'W':
-                pos = '23'
-            elif letter == 'X':
-                pos = '24'
-            elif letter == 'Y':
-                pos = '25'
-            elif letter == 'Z':
-                pos = '26'
+    for i in abbreviations:
+        for abbrev in i:
+            for letter in abbrev:
+                pos = letter_number_dicionary[letter]
+                target1_converted_abbr_l.append(pos)
 
+abbreviation_converter(target1_five_games_df_w_l)
 
+target1_converted_abbr = pd.DataFrame()
 
-        target1_converted_abbr.append(convertedabrev)
+number_pos = 1
 
+for number in target1_converted_abbr_l:
+    posb = True
 
+    number1 = ''
+    number2 = ''
+    number3 = ''
 
+    if number_pos == 3:
+        number3 = number
+        number_pos = 1
+        posb = False
+        target1_converted_abbr.append(number1 + number2 + number3)
+
+    elif number_pos == 1 & posb == True:
+        number1 = number
+        number_pos = 2
+        posb = False
+
+    elif number_pos == 2 & posb == True:
+        number2 = number
+        number_pos = 3
+
+print(target1_converted_abbr)
+
+'''
 model_target1 = Sequential()
 
-model_target1.add(Dense(5, activation='relu', input_dim=73))
+model_target1.add(Dense(74, activation='relu', input_dim=73))
 model_target1.add(Dense(200, activation='relu'))
 model_target1.add(Dense(200, activation='relu'))
 model_target1.add(Dense(200, activation='relu'))
@@ -379,3 +384,4 @@ model_target1.add(Dense(1))
 model_target1.compile(optimizer='adam', loss='mean_squared_error')
 
 model_target1.fit(target1_five_games_df, target1_five_games_df_w, validation_split=0.1, epochs=1000)
+'''
