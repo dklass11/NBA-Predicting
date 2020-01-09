@@ -1,11 +1,11 @@
 # import array and datframe modules
 import numpy as np
 import pandas as pd
-'''
+
 # import neural network model
 from keras.models import Sequential
 from keras.layers import Dense
-'''
+
 # import nba data fetching module
 import datetime
 from sportsreference.nba.teams import Teams
@@ -301,15 +301,19 @@ fifth_game_df_2 = fifth_game_2.dataframe
 first_game_df_2 = first_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+
 second_game_df_2 = second_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+
 third_game_df_2 = third_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+
 fourth_game_df_2 = fourth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+
 fifth_game_df_2 = fifth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
@@ -326,51 +330,42 @@ target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[
 target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 
-target1_five_games_df_w_l = target1_five_games_df_w.values.tolist()
+team_abbrev = {'ATL': 1, 'BKN': 2, 'BOS': 3, 'CHA': 4, 'CHI': 5, 'CLE': 6, 'DAL': 7, 'DEN': 8, 'DET': 9, 'GSW': 10,
+            'HOU': 11, 'IND': 12, 'LAC': 13, 'LAL': 14, 'MEM': 15, 'MIA': 16, 'MIL': 17,  'MIN': 18, 'NOP': 19, 'NYK': 20,
+            'OKC': 21, 'ORL': 22, 'PHI': 23, 'PHX': 24, 'POR': 25, 'SAC': 26, 'SAS': 27, 'TOR': 28, 'UTA': 29, 'WAS': 30}
 
-target1_converted_abbr_l = list()
+target1_converted_abbr_in = target1_five_games_df_w.values.tolist()
 
-letter_number_dicionary = {'A':'01', 'B':'02', 'C':'03', 'D':'04', 'E':'05', 'F':'06', 'G':'07', 'H':'08', 'I':'09', 'J':'10', 'K':'11', 'L':'12', 'M':'13',
-                    'N':'14', 'O':'15', 'P':'16', 'Q':'17', 'R':'18', 'S':'19', 'T':'20', 'U':'21', 'V':'22', 'W':'23', 'X':'24', 'Y':'25', 'Z':'26'}
+target1_converted_abbr = list()
 
 def abbreviation_converter(abbreviations):
     for i in abbreviations:
         for abbrev in i:
-            for letter in abbrev:
-                pos = letter_number_dicionary[letter]
-                target1_converted_abbr_l.append(pos)
+            pos = team_abbrev[abbrev]
+            target1_converted_abbr.append(pos)
 
-abbreviation_converter(target1_five_games_df_w_l)
+abbreviation_converter(target1_converted_abbr_in)
 
-target1_converted_abbr = pd.DataFrame()
+target1_converted_abbr_df = pd.DataFrame(target1_converted_abbr)
 
-number_pos = 1
+target1_converted_abbr_df.columns = ['winning_abbr']
 
-for number in target1_converted_abbr_l:
-    posb = True
+target2_converted_abbr_in = target2_five_games_df_w.values.tolist()
 
-    number1 = ''
-    number2 = ''
-    number3 = ''
+target2_converted_abbr = list()
 
-    if number_pos == 3:
-        number3 = number
-        number_pos = 1
-        posb = False
-        target1_converted_abbr.append(number1 + number2 + number3)
+def abbreviation_converter_2(abbreviations):
+    for i in abbreviations:
+        for abbrev in i:
+            pos = team_abbrev[abbrev]
+            target2_converted_abbr.append(pos)
 
-    elif number_pos == 1 & posb == True:
-        number1 = number
-        number_pos = 2
-        posb = False
+abbreviation_converter_2(target2_converted_abbr_in)
 
-    elif number_pos == 2 & posb == True:
-        number2 = number
-        number_pos = 3
+target2_converted_abbr_df = pd.DataFrame(target2_converted_abbr)
 
-print(target1_converted_abbr)
+target2_converted_abbr_df.columns = ['winning_abbr']
 
-'''
 model_target1 = Sequential()
 
 model_target1.add(Dense(74, activation='relu', input_dim=73))
@@ -383,5 +378,8 @@ model_target1.add(Dense(1))
 
 model_target1.compile(optimizer='adam', loss='mean_squared_error')
 
-model_target1.fit(target1_five_games_df, target1_five_games_df_w, validation_split=0.1, epochs=1000)
-'''
+model_target1.fit(target1_five_games_df, target1_converted_abbr_df, validation_split=0.1, epochs=1000)
+
+predictedwins = model_target1.predict(target2_five_games_df)
+
+print(predictedwins)

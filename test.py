@@ -28,6 +28,59 @@ game2018 = Boxscore('201810160BOS')
 print(game2018.winner)
 
 '''
+target1_converted_abbr_l = list()
+
+letter_number_dicionary = {'A':'01', 'B':'02', 'C':'03', 'D':'04', 'E':'05', 'F':'06', 'G':'07', 'H':'08', 'I':'09', 'J':'10', 'K':'11', 'L':'12', 'M':'13',
+                    'N':'14', 'O':'15', 'P':'16', 'Q':'17', 'R':'18', 'S':'19', 'T':'20', 'U':'21', 'V':'22', 'W':'23', 'X':'24', 'Y':'25', 'Z':'26'}
+
+def abbreviation_converter(abbreviations):
+    for i in abbreviations:
+        for abbrev in i:
+            for letter in abbrev:
+                pos = letter_number_dicionary[letter]
+                target1_converted_abbr_l.append(pos)
+
+abbreviation_converter(target1_five_games_df_w_l)
+
+number1 = ''
+number2 = ''
+number3 = ''
+
+pos_number1 = True
+pos_number2 = False
+pos_number3 = False
+b = False
+
+number_list = list()
+
+for number in target1_converted_abbr_l:
+    print(pos_number1, pos_number2, pos_number3)
+
+    b = True
+
+    if pos_number2 == True:
+        number2 = number
+        pos_number3 = True
+        pos_number2 = False
+        b = False
+
+    elif pos_number1 == True:
+        number1 = number
+        pos_number2 = True
+        pos_number1 = False
+
+    elif pos_number3 == True & b == True:
+        number3 = number
+        pos_number1 = True
+        combined_numbers = number1 + number2 + number3
+        number_list.append(combined_numbers)
+        pos_number3 = False
+
+target1_converted_abbr = pd.DataFrame(number_list, columns="winning_abbr")
+
+'''
+
+'''
 
 # convert schedule dates to count
 def dateconverter1(date):
