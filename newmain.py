@@ -262,8 +262,6 @@ target1_five_games_df_w = target1_five_games_df_w.append(third_game.dataframe[['
 target1_five_games_df_w = target1_five_games_df_w.append(fourth_game.dataframe[['winning_abbr']], ignore_index=True)
 target1_five_games_df_w = target1_five_games_df_w.append(fifth_game.dataframe[['winning_abbr']], ignore_index=True)
 
-
-
 first_game_df_2 = pd.DataFrame()
 second_game_df_2 = pd.DataFrame()
 third_game_df_2 = pd.DataFrame()
@@ -304,4 +302,80 @@ target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[
 target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 
-print(target2_five_games_df_w)
+target1_converted_abbr = pd.DataFrame()
+
+def abbreviation_converter(abbreviations):
+    for abbrev in target2_five_games_df_w:
+        for letter in abbrev:
+            if letter == 'A':
+                pos = '1'
+            elif letter == 'B':
+                pos = '2'
+            elif letter == 'C':
+                pos = '3'
+            elif letter == 'D':
+                pos = '4'
+            elif letter == 'E':
+                pos = '5'
+            elif letter == 'F':
+                pos = '6'
+            elif letter == 'G':
+                pos = '7'
+            elif letter == 'H':
+                pos = '8'
+            elif letter == 'I':
+                pos = '9'
+            elif letter == 'J':
+                pos = '10'
+            elif letter == 'K':
+                pos = '11'
+            elif letter == 'L':
+                pos = '12'
+            elif letter == 'M':
+                pos = '13'
+            elif letter == 'N':
+                pos = '14'
+            elif letter == 'O':
+                pos = '15'
+            elif letter == 'P':
+                pos = '16'
+            elif letter == 'Q':
+                pos = '17'
+            elif letter == 'R':
+                pos = '18'
+            elif letter == 'S':
+                pos = '19'
+            elif letter == 'T':
+                pos = '20'
+            elif letter == 'U':
+                pos = '21'
+            elif letter == 'V':
+                pos = '22'
+            elif letter == 'W':
+                pos = '23'
+            elif letter == 'X':
+                pos = '24'
+            elif letter == 'Y':
+                pos = '25'
+            elif letter == 'Z':
+                pos = '26'
+
+
+
+        target1_converted_abbr.append(convertedabrev)
+
+
+
+model_target1 = Sequential()
+
+model_target1.add(Dense(5, activation='relu', input_dim=73))
+model_target1.add(Dense(200, activation='relu'))
+model_target1.add(Dense(200, activation='relu'))
+model_target1.add(Dense(200, activation='relu'))
+model_target1.add(Dense(200, activation='relu'))
+model_target1.add(Dense(200, activation='relu'))
+model_target1.add(Dense(1))
+
+model_target1.compile(optimizer='adam', loss='mean_squared_error')
+
+model_target1.fit(target1_five_games_df, target1_five_games_df_w, validation_split=0.1, epochs=1000)
