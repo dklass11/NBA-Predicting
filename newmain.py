@@ -261,15 +261,19 @@ fifth_game_df = fifth_game.dataframe
 first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+                                
 second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+                                
 third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+
 fourth_game_df = fourth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
+
 fifth_game_df = fifth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
