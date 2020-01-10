@@ -13,9 +13,11 @@ from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
 # get target1 team's full schedule and boxscore indexes
-target1_team = 'PHI'
+target1_team = 'TOR'
 target1_team_schedule = Schedule(target1_team)
 target1_team_indexes = list()
+
+print('Acquired team 1 schdeule.')
 
 for game in target1_team_schedule:
     target1_team_indexes.append(game.boxscore_index)
@@ -53,6 +55,8 @@ def dateconverter(date):
 
 # run current date through converter
 current_date_count = dateconverter(str(datetime.date.today()))
+
+print('Converted current date.')
 
 def indexconverter(index):
     count = 0
@@ -115,6 +119,8 @@ for index_count in target1_team_five_index_counts:
 for position in target1_team_five_pos:
     target1_team_five_indexes.append(target1_team_indexes[position])
 
+print('Found boxscore indexes of team 1.')
+
 # store each Boxscore
 first_game = Boxscore(target1_team_five_indexes[0])
 second_game = Boxscore(target1_team_five_indexes[1])
@@ -131,76 +137,14 @@ for index in target1_team_five_indexes:
 
 
 # rerun the same code for target2
-target2_team = 'LAL'
+target2_team = 'LAC'
 target2_team_schedule = Schedule(target2_team)
 target2_team_indexes = list()
 
+print('Acquired team 2 schdeule.')
+
 for game in target2_team_schedule:
     target2_team_indexes.append(game.boxscore_index)
-
-# convert current date to count
-def dateconverter_2(date):
-    count = 0
-
-    # convert month to number of days
-    if date[5:7] == '10':
-        count = 0
-
-    elif date[5:7] == '11':
-        count = 31
-
-    elif date[5:7] == '12':
-        count = 61
-
-    elif date[5:7] == '01':
-        count = 92
-
-    elif date[5:7] == '02':
-        count = 123
-
-    elif date[5:7] == '03':
-        count = 152
-
-    elif date[5:7] == '04':
-        count = 183
-
-    # add number of days to count
-    count += int(date[8:10])
-
-    return count
-
-# run current date through converter
-current_date_count_2 = dateconverter_2(str(datetime.date.today()))
-
-def indexconverter_2(index):
-    count = 0
-
-    # convert month to number of days
-    if index[4:6] == '10':
-        count = 0
-
-    elif index[4:6] == '11':
-        count = 31
-
-    elif index[4:6] == '12':
-        count = 61
-
-    elif index[4:6] == '01':
-        count = 92
-
-    elif index[4:6] == '02':
-        count = 123
-
-    elif index[4:6] == '03':
-        count = 152
-
-    elif index[4:6] == '04':
-        count = 183
-
-    # add number of days to count
-    count += int(index[6:8])
-
-    return count
 
 # run indexes through converter
 target2_team_index_counts = list()
@@ -231,6 +175,8 @@ for index_count in target2_team_five_index_counts:
 
 for position in target2_team_five_pos:
     target2_team_five_indexes.append(target2_team_indexes[position])
+
+print('Found boxscore indexes of team 2.')
 
 # store each Boxscore
 first_game_2 = Boxscore(target2_team_five_indexes[0])
@@ -334,6 +280,8 @@ target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[
 target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winning_abbr']], ignore_index=True)
 
+print('Gathered both data sets.')
+
 team_abbrev = {'ATL': 1, 'BKN': 2, 'BOS': 3, 'CHA': 4, 'CHI': 5, 'CLE': 6, 'DAL': 7, 'DEN': 8, 'DET': 9, 'GSW': 10,
             'HOU': 11, 'IND': 12, 'LAC': 13, 'LAL': 14, 'MEM': 15, 'MIA': 16, 'MIL': 17,  'MIN': 18, 'NOP': 19, 'NYK': 20,
             'OKC': 21, 'ORL': 22, 'PHI': 23, 'PHX': 24, 'POR': 25, 'SAC': 26, 'SAS': 27, 'TOR': 28, 'UTA': 29, 'WAS': 30}
@@ -370,6 +318,8 @@ target2_converted_abbr_df = pd.DataFrame(target2_converted_abbr)
 
 target2_converted_abbr_df.columns = ['winning_abbr']
 
+print('Running neural network.')
+
 model_target1 = Sequential()
 
 model_target1.add(Dense(74, activation='relu', input_dim=73))
@@ -382,7 +332,7 @@ model_target1.add(Dense(1))
 
 model_target1.compile(optimizer='adam', loss='mean_squared_error')
 
-model_target1.fit(target1_five_games_df, target1_converted_abbr_df, validation_split=0.1, epochs=1000)
+model = model_target1.fit(target1_five_games_df, target1_converted_abbr_df, validation_split=0.1, epochs=1000, shuffle=True)
 
 predictedwins = model_target1.predict(target2_five_games_df)
 
