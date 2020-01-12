@@ -8,7 +8,6 @@ from keras.layers import Dense
 
 # import nba data fetching module
 import datetime
-from sportsreference.nba.teams import Teams
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
@@ -230,11 +229,11 @@ target1_five_games_df = target1_five_games_df.append(third_game_df, ignore_index
 target1_five_games_df = target1_five_games_df.append(fourth_game_df, ignore_index=True)
 target1_five_games_df = target1_five_games_df.append(fifth_game_df, ignore_index=True)
 
-target1_five_games_df_w = first_game.dataframe[['winning_abbr']]
-target1_five_games_df_w = target1_five_games_df_w.append(second_game.dataframe[['winning_abbr']], ignore_index=True)
-target1_five_games_df_w = target1_five_games_df_w.append(third_game.dataframe[['winning_abbr']], ignore_index=True)
-target1_five_games_df_w = target1_five_games_df_w.append(fourth_game.dataframe[['winning_abbr']], ignore_index=True)
-target1_five_games_df_w = target1_five_games_df_w.append(fifth_game.dataframe[['winning_abbr']], ignore_index=True)
+target1_five_games_df_w = first_game.dataframe[['winner']]
+target1_five_games_df_w = target1_five_games_df_w.append(second_game.dataframe[['winner']], ignore_index=True)
+target1_five_games_df_w = target1_five_games_df_w.append(third_game.dataframe[['winner']], ignore_index=True)
+target1_five_games_df_w = target1_five_games_df_w.append(fourth_game.dataframe[['winner']], ignore_index=True)
+target1_five_games_df_w = target1_five_games_df_w.append(fifth_game.dataframe[['winner']], ignore_index=True)
 
 first_game_df_2 = pd.DataFrame()
 second_game_df_2 = pd.DataFrame()
@@ -274,13 +273,16 @@ target2_five_games_df = target2_five_games_df.append(third_game_df_2, ignore_ind
 target2_five_games_df = target2_five_games_df.append(fourth_game_df_2, ignore_index=True)
 target2_five_games_df = target2_five_games_df.append(fifth_game_df_2, ignore_index=True)
 
-target2_five_games_df_w = first_game_2.dataframe[['winning_abbr']]
-target2_five_games_df_w = target2_five_games_df_w.append(second_game_2.dataframe[['winning_abbr']], ignore_index=True)
-target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[['winning_abbr']], ignore_index=True)
-target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winning_abbr']], ignore_index=True)
-target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winning_abbr']], ignore_index=True)
+target2_five_games_df_w = first_game_2.dataframe[['winner']]
+target2_five_games_df_w = target2_five_games_df_w.append(second_game_2.dataframe[['winner']], ignore_index=True)
+target2_five_games_df_w = target2_five_games_df_w.append(third_game_2.dataframe[['winner']], ignore_index=True)
+target2_five_games_df_w = target2_five_games_df_w.append(fourth_game_2.dataframe[['winner']], ignore_index=True)
+target2_five_games_df_w = target2_five_games_df_w.append(fifth_game_2.dataframe[['winner']], ignore_index=True)
 
-print('Gathered both data sets.')
+print('Gathered both 5 game boxscore indexes of target teams, and winning teams.')
+
+
+'''
 
 team_abbrev = {'ATL': 1, 'BKN': 2, 'BOS': 3, 'CHA': 4, 'CHI': 5, 'CLE': 6, 'DAL': 7, 'DEN': 8, 'DET': 9, 'GSW': 10,
             'HOU': 11, 'IND': 12, 'LAC': 13, 'LAL': 14, 'MEM': 15, 'MIA': 16, 'MIL': 17,  'MIN': 18, 'NOP': 19, 'NYK': 20,
@@ -337,3 +339,5 @@ model = model_target1.fit(target1_five_games_df, target1_converted_abbr_df, vali
 predictedwins = model_target1.predict(target2_five_games_df)
 
 print(predictedwins)
+
+'''
