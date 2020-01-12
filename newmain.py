@@ -137,7 +137,7 @@ for index in target1_team_five_indexes:
 
 
 # rerun the same code for target2
-target2_team = 'LAC'
+target2_team = 'LAL'
 target2_team_schedule = Schedule(target2_team)
 target2_team_indexes = list()
 
