@@ -11,8 +11,6 @@ import datetime
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
-<<<<<<< HEAD
-=======
 # get random team's full schedule and boxscore indexes
 target1_team = 'PHI'
 target1_team_schedule = Schedule(target1_team)
@@ -181,4 +179,3 @@ for game in for_game_list:
     target1_five_games_points_df = target1_five_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
 
 print('Gathered 5 game stats and seperated points of team 1.')
->>>>>>> 674d5c5cdc381335972b8d79636fb1a09fcb8110
