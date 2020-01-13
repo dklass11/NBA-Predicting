@@ -183,6 +183,7 @@ second_game_2 = Boxscore(target2_team_five_indexes[1])
 third_game_2 = Boxscore(target2_team_five_indexes[2])
 fourth_game_2 = Boxscore(target2_team_five_indexes[3])
 fifth_game_2 = Boxscore(target2_team_five_indexes[4])
+print(first_game_2.dataframe)
 
 # create boolean list to show if target2 team is home
 home_list_2 = list([False, False, False, False, False])
@@ -196,12 +197,6 @@ second_game_df = pd.DataFrame()
 third_game_df = pd.DataFrame()
 fourth_game_df = pd.DataFrame()
 fifth_game_df = pd.DataFrame()
-
-first_game_df = first_game.dataframe
-second_game_df = second_game.dataframe
-third_game_df = third_game.dataframe
-fourth_game_df = fourth_game.dataframe
-fifth_game_df = fifth_game.dataframe
 
 first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
@@ -223,11 +218,11 @@ fifth_game_df = fifth_game_df.drop(columns=['winning_name', 'winning_abbr', 'win
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
 
-target1_five_games_df = first_game_df
-target1_five_games_df = target1_five_games_df.append(second_game_df, ignore_index=True)
-target1_five_games_df = target1_five_games_df.append(third_game_df, ignore_index=True)
-target1_five_games_df = target1_five_games_df.append(fourth_game_df, ignore_index=True)
-target1_five_games_df = target1_five_games_df.append(fifth_game_df, ignore_index=True)
+target1_five_games_df = first_game.dataframe
+target1_five_games_df = target1_five_games_df.append(second_game.dataframe, ignore_index=True)
+target1_five_games_df = target1_five_games_df.append(third_game.dataframe, ignore_index=True)
+target1_five_games_df = target1_five_games_df.append(fourth_game.dataframe, ignore_index=True)
+target1_five_games_df = target1_five_games_df.append(fifth_game.dataframe, ignore_index=True)
 
 target1_five_games_df_w = first_game.dataframe[['winner']]
 target1_five_games_df_w = target1_five_games_df_w.append(second_game.dataframe[['winner']], ignore_index=True)
@@ -240,12 +235,6 @@ second_game_df_2 = pd.DataFrame()
 third_game_df_2 = pd.DataFrame()
 fourth_game_df_2 = pd.DataFrame()
 fifth_game_df_2 = pd.DataFrame()
-
-first_game_df_2 = first_game_2.dataframe
-second_game_df_2 = second_game_2.dataframe
-third_game_df_2 = third_game_2.dataframe
-fourth_game_df_2 = fourth_game_2.dataframe
-fifth_game_df_2 = fifth_game_2.dataframe
 
 first_game_df_2 = first_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
@@ -267,11 +256,11 @@ fifth_game_df_2 = fifth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
 
-target2_five_games_df = first_game_df_2
-target2_five_games_df = target2_five_games_df.append(second_game_df_2, ignore_index=True)
-target2_five_games_df = target2_five_games_df.append(third_game_df_2, ignore_index=True)
-target2_five_games_df = target2_five_games_df.append(fourth_game_df_2, ignore_index=True)
-target2_five_games_df = target2_five_games_df.append(fifth_game_df_2, ignore_index=True)
+target2_five_games_df = first_game_2.dataframe
+target2_five_games_df = target2_five_games_df.append(second_game_2.dataframe, ignore_index=True)
+target2_five_games_df = target2_five_games_df.append(third_game_2.dataframe, ignore_index=True)
+target2_five_games_df = target2_five_games_df.append(fourth_game_2.dataframe, ignore_index=True)
+target2_five_games_df = target2_five_games_df.append(fifth_game_2.dataframe, ignore_index=True)
 
 target2_five_games_df_w = first_game_2.dataframe[['winner']]
 target2_five_games_df_w = target2_five_games_df_w.append(second_game_2.dataframe[['winner']], ignore_index=True)
