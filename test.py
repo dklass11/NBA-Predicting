@@ -28,6 +28,42 @@ game2018 = Boxscore('201810160BOS')
 print(game2018.winner)
 
 '''
+team_abbrev = {'ATL': 1, 'BKN': 2, 'BOS': 3, 'CHA': 4, 'CHI': 5, 'CLE': 6, 'DAL': 7, 'DEN': 8, 'DET': 9, 'GSW': 10,
+            'HOU': 11, 'IND': 12, 'LAC': 13, 'LAL': 14, 'MEM': 15, 'MIA': 16, 'MIL': 17,  'MIN': 18, 'NOP': 19, 'NYK': 20,
+            'OKC': 21, 'ORL': 22, 'PHI': 23, 'PHX': 24, 'POR': 25, 'SAC': 26, 'SAS': 27, 'TOR': 28, 'UTA': 29, 'WAS': 30}
+
+target1_converted_abbr_in = target1_five_games_df_w.values.tolist()
+
+target1_converted_abbr = list()
+
+def abbreviation_converter(abbreviations):
+    for i in abbreviations:
+        for abbrev in i:
+            pos = team_abbrev[abbrev]
+            target1_converted_abbr.append(pos)
+
+abbreviation_converter(target1_converted_abbr_in)
+
+target1_converted_abbr_df = pd.DataFrame(target1_converted_abbr)
+
+target1_converted_abbr_df.columns = ['winning_abbr']
+
+target2_converted_abbr_in = target2_five_games_df_w.values.tolist()
+
+target2_converted_abbr = list()
+
+def abbreviation_converter_2(abbreviations):
+    for i in abbreviations:
+        for abbrev in i:
+            pos = team_abbrev[abbrev]
+            target2_converted_abbr.append(pos)
+
+abbreviation_converter_2(target2_converted_abbr_in)
+
+target2_converted_abbr_df = pd.DataFrame(target2_converted_abbr)
+
+target2_converted_abbr_df.columns = ['winning_abbr']
+
 target1_converted_abbr_l = list()
 
 letter_number_dicionary = {'A':'01', 'B':'02', 'C':'03', 'D':'04', 'E':'05', 'F':'06', 'G':'07', 'H':'08', 'I':'09', 'J':'10', 'K':'11', 'L':'12', 'M':'13',

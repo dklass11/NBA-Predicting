@@ -12,7 +12,7 @@ from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
 # get target1 team's full schedule and boxscore indexes
-target1_team = 'TOR'
+target1_team = 'PHI'
 target1_team_schedule = Schedule(target1_team)
 target1_team_indexes = list()
 
@@ -182,7 +182,7 @@ print('Gathered 5 game stats and seperated points of team 1.')
 
 
 # rerun the same code for target2
-target2_team = 'LAL'
+target2_team = 'BOS'
 target2_team_schedule = Schedule(target2_team)
 target2_team_indexes = list()
 
@@ -283,45 +283,6 @@ for game in for_game_list_2:
 
 print('Gathered 5 game stats and seperated points of team 2.')
 
-
-'''
-
-team_abbrev = {'ATL': 1, 'BKN': 2, 'BOS': 3, 'CHA': 4, 'CHI': 5, 'CLE': 6, 'DAL': 7, 'DEN': 8, 'DET': 9, 'GSW': 10,
-            'HOU': 11, 'IND': 12, 'LAC': 13, 'LAL': 14, 'MEM': 15, 'MIA': 16, 'MIL': 17,  'MIN': 18, 'NOP': 19, 'NYK': 20,
-            'OKC': 21, 'ORL': 22, 'PHI': 23, 'PHX': 24, 'POR': 25, 'SAC': 26, 'SAS': 27, 'TOR': 28, 'UTA': 29, 'WAS': 30}
-
-target1_converted_abbr_in = target1_five_games_df_w.values.tolist()
-
-target1_converted_abbr = list()
-
-def abbreviation_converter(abbreviations):
-    for i in abbreviations:
-        for abbrev in i:
-            pos = team_abbrev[abbrev]
-            target1_converted_abbr.append(pos)
-
-abbreviation_converter(target1_converted_abbr_in)
-
-target1_converted_abbr_df = pd.DataFrame(target1_converted_abbr)
-
-target1_converted_abbr_df.columns = ['winning_abbr']
-
-target2_converted_abbr_in = target2_five_games_df_w.values.tolist()
-
-target2_converted_abbr = list()
-
-def abbreviation_converter_2(abbreviations):
-    for i in abbreviations:
-        for abbrev in i:
-            pos = team_abbrev[abbrev]
-            target2_converted_abbr.append(pos)
-
-abbreviation_converter_2(target2_converted_abbr_in)
-
-target2_converted_abbr_df = pd.DataFrame(target2_converted_abbr)
-
-target2_converted_abbr_df.columns = ['winning_abbr']
-
 print('Running neural network.')
 
 model_target1 = Sequential()
@@ -332,14 +293,12 @@ model_target1.add(Dense(200, activation='relu'))
 model_target1.add(Dense(200, activation='relu'))
 model_target1.add(Dense(200, activation='relu'))
 model_target1.add(Dense(200, activation='relu'))
-model_target1.add(Dense(1))
+model_target1.add(Dense(2))
 
 model_target1.compile(optimizer='adam', loss='mean_squared_error')
 
-model = model_target1.fit(target1_five_games_df, target1_converted_abbr_df, validation_split=0.1, epochs=1000, shuffle=True)
+model = model_target1.fit(target1_five_games_df, target1_five_games_points_df, validation_split=0.1, epochs=1000, shuffle=True)
 
 predictedwins = model_target1.predict(target2_five_games_df)
 
 print(predictedwins)
-
-'''
