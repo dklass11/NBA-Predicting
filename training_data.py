@@ -19,8 +19,6 @@ team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET
 
 year = '2019'
 
-random_date_count = 0
-
 # generate random date
 def date_generator():
     chance = rand.randint(1, 2)
@@ -61,16 +59,30 @@ def date_generator():
 
     random_date = year + '-' + month + '-' + day
 
-    date_pickle_file = open('training_date_pickle.txt', 'rb')
-    random_date_list = pickle.load(date_pickle_file)
-    date_pickle_file.close()
+    try:
+        date_pickle_file = open(year + '_training_date_pickle.txt', 'rb')
+        random_date_list = pickle.load(date_pickle_file)
+        date_pickle_file.close()
+
+    except:
+        date_pickle_file = open(year + '_training_date_pickle.txt', 'wb')
+        date_pickle_file.close()
+        date_pickle_file = open(year + '_training_date_pickle.txt', 'rb')
+
+        try:
+            random_date_list = pickle.load(date_pickle_file)
+
+        except:
+            date_pickle_file.close()
+            random_date_list = list()
 
     if random_date not in random_date_list:
         random_date_list.append(random_date)
+
     else:
         date_generator()
 
-    date_pickle_file = open('training_date_pickle.txt', 'wb')
+    date_pickle_file = open(year + '_training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
 
@@ -102,12 +114,13 @@ def date_generator():
 
         # add number of days to count
         count += int(date[8:])
-
+        
         return count
 
+    global random_date_count
     random_date_count = dateconverter(random_date)
 
-    print('Generated random date. ' + random_date)
+    print('Generated random date: ' + random_date)
 
 date_generator()
 
@@ -241,3 +254,4 @@ for team in team_abbrev:
         target_five_games_points_df = target_five_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
 
     print('Gathered 5 game stats and seperated points of ' + team)
+    print(target_five_games_points_df, target_five_games_df)
