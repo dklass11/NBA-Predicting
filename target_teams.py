@@ -102,7 +102,6 @@ for count in target1_team_index_counts:
             position = target1_team_index_counts.index(count)
 
             # use index counts to find positions of Boxscore indexes
-
             target1_team_five_index_counts = target1_team_index_counts[::-1]
             target1_team_five_index_counts = target1_team_five_index_counts[(82-position):((82-position)+5)]
 

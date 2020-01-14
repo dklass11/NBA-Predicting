@@ -1,6 +1,8 @@
-# import array and datframe modules
+# import array, datframe, math, and storing modules
 import numpy as np
 import pandas as pd
+import random as rand
+import pickle
 
 # import neural network model
 from keras.models import Sequential
@@ -12,19 +14,18 @@ from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
 # get random team's full schedule and boxscore indexes
-team_abbrev = list(['ATL', 'BKN', 'BOS', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
-            'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHX', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
+team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
+            'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
 for team in team_abbrev:
-    target_team = team
-    target_team_schedule = Schedule(target_team)
+    target_team_schedule = Schedule(team) # fix this for historical, not current year
     target_team_indexes = list()
 
-    print('Acquired team schdeule.')
+    print('Acquired ' + team + "'s " + 'schdeule.')
 
     for game in target_team_schedule:
         target_team_indexes.append(game.boxscore_index)
-
+    
     # convert random date to count
     def dateconverter(date):
         count = 0
@@ -52,14 +53,71 @@ for team in team_abbrev:
             count = 183
 
         # add number of days to count
-        count += int(date[8:10])
+        count += int(date[8:])
 
         return count
 
-    # run random date through converter
-    current_date_count = dateconverter(str(datetime.date.today()))
+    random_date_count = 0
 
-    print('Converted current date.')
+    # run random date through converter
+
+    year = '2019'
+    chance = rand.randint(1, 2)
+
+    if chance == 1:
+        month = '0' + str(rand.randint(1, 4))
+
+    else: 
+        month = str(rand.randint(11, 12)) # change
+        
+    if month == '01' or month == '03' or month == '10' or month == '12':
+        day = rand.randint(1, 31)
+
+        if day in range(1, 10):
+            day = '0' + str(day)
+        
+        else:
+            day = str(day)
+
+    elif month == '02':
+        day = rand.randint(1, 28)
+
+        if day in range(1, 10):
+            day = '0' + str(day)
+        else:
+            day = str(day)
+
+    else:
+        day = rand.randint(1, 30)
+
+        if day in range(1, 10):
+            day = '0' + str(day)
+        else:
+            day = str(day)
+
+    random_date = year + '-' + month + '-' + day
+    print(random_date)
+    #random_date = '2019-11-29'
+
+    date_pickle_file = open('training_date_pickle.txt', 'rb')
+    random_date_list = pickle.load(date_pickle_file)
+    date_pickle_file.close()
+    
+    '''
+    if random_date not in random_date_list:
+        random_date_list.append(random_date)
+    else:
+        date_generator()
+    '''
+    date_pickle_file = open('training_date_pickle.txt', 'wb')
+    pickle.dump(random_date_list, date_pickle_file)
+    date_pickle_file.close()
+    
+    random_date_count = dateconverter(random_date)
+
+    
+
+    print('Generated random date.')
 
     def indexconverter(index):
         count = 0
@@ -99,14 +157,13 @@ for team in team_abbrev:
 
     # compare dates and find previous five game dates
     target_index_counter = 0
-
+    
     for count in target_team_index_counts:
         if target_index_counter == 0:
-            if current_date_count <= count:
+            if random_date_count <= count:
                 position = target_team_index_counts.index(count)
 
                 # use index counts to find positions of Boxscore indexes
-
                 target_team_five_index_counts = target_team_index_counts[::-1]
                 target_team_five_index_counts = target_team_five_index_counts[(82-position):((82-position)+5)]
 
@@ -122,8 +179,8 @@ for team in team_abbrev:
     for position in target_team_five_pos:
         target_team_five_indexes.append(target_team_indexes[position])
 
-    print('Found boxscore indexes of team.')
-
+    print('Found boxscore indexes of ' + team)
+    print(target_team_five_indexes)
     # store each Boxscore
     first_game = Boxscore(target_team_five_indexes[0])
     second_game = Boxscore(target_team_five_indexes[1])
@@ -135,7 +192,7 @@ for team in team_abbrev:
     home_list = list([False, False, False, False, False])
 
     for index in target_team_five_indexes:
-        if target_team in index:
+        if team in index:
             home_list[target_team_five_indexes.index(index)] = True
 
     first_game_df = pd.DataFrame()
@@ -182,4 +239,4 @@ for team in team_abbrev:
     for game in for_game_list:
         target_five_games_points_df = target_five_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
 
-    print('Gathered 5 game stats and seperated points of team.')
+    print('Gathered 5 game stats and seperated points of ' + team)
