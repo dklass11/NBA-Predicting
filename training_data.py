@@ -17,15 +17,63 @@ from sportsreference.nba.schedule import Schedule
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-for team in team_abbrev:
-    target_team_schedule = Schedule(team) # fix this for historical, not current year
-    target_team_indexes = list()
+year = '2019'
 
-    print('Acquired ' + team + "'s " + 'schdeule.')
+random_date_count = 0
 
-    for game in target_team_schedule:
-        target_team_indexes.append(game.boxscore_index)
-    
+# generate random date
+def date_generator():
+    chance = rand.randint(1, 2)
+
+    if chance == 1:
+        month = '0' + str(rand.randint(1, 4))
+
+    else: 
+        month = str(rand.randint(11, 12))
+        
+    if month == '01' or month == '03' or month == '12':
+        day = rand.randint(1, 31)
+
+        if day in range(1, 10):
+            day = '0' + str(day)
+        
+        else:
+            day = str(day)
+
+    elif month == '02':
+        day = rand.randint(1, 28)
+
+        if day in range(1, 10):
+            day = '0' + str(day)
+        else:
+            day = str(day)
+
+    elif month == '04':
+        day = '0' + str(rand.randint(1, 10))
+
+    else:
+        day = rand.randint(1, 30)
+
+        if day in range(1, 10):
+            day = '0' + str(day)
+        else:
+            day = str(day)
+
+    random_date = year + '-' + month + '-' + day
+
+    date_pickle_file = open('training_date_pickle.txt', 'rb')
+    random_date_list = pickle.load(date_pickle_file)
+    date_pickle_file.close()
+
+    if random_date not in random_date_list:
+        random_date_list.append(random_date)
+    else:
+        date_generator()
+
+    date_pickle_file = open('training_date_pickle.txt', 'wb')
+    pickle.dump(random_date_list, date_pickle_file)
+    date_pickle_file.close()
+
     # convert random date to count
     def dateconverter(date):
         count = 0
@@ -57,67 +105,20 @@ for team in team_abbrev:
 
         return count
 
-    random_date_count = 0
-
-    # run random date through converter
-
-    year = '2019'
-    chance = rand.randint(1, 2)
-
-    if chance == 1:
-        month = '0' + str(rand.randint(1, 4))
-
-    else: 
-        month = str(rand.randint(11, 12)) # change
-        
-    if month == '01' or month == '03' or month == '10' or month == '12':
-        day = rand.randint(1, 31)
-
-        if day in range(1, 10):
-            day = '0' + str(day)
-        
-        else:
-            day = str(day)
-
-    elif month == '02':
-        day = rand.randint(1, 28)
-
-        if day in range(1, 10):
-            day = '0' + str(day)
-        else:
-            day = str(day)
-
-    else:
-        day = rand.randint(1, 30)
-
-        if day in range(1, 10):
-            day = '0' + str(day)
-        else:
-            day = str(day)
-
-    random_date = year + '-' + month + '-' + day
-    print(random_date)
-    #random_date = '2019-11-29'
-
-    date_pickle_file = open('training_date_pickle.txt', 'rb')
-    random_date_list = pickle.load(date_pickle_file)
-    date_pickle_file.close()
-    
-    '''
-    if random_date not in random_date_list:
-        random_date_list.append(random_date)
-    else:
-        date_generator()
-    '''
-    date_pickle_file = open('training_date_pickle.txt', 'wb')
-    pickle.dump(random_date_list, date_pickle_file)
-    date_pickle_file.close()
-    
     random_date_count = dateconverter(random_date)
 
-    
+    print('Generated random date. ' + random_date)
 
-    print('Generated random date.')
+date_generator()
+
+for team in team_abbrev:
+    target_team_schedule = Schedule(team, year=year) # fix this for historical, not current year
+    target_team_indexes = list()
+
+    print('Acquired ' + team + "'s " + 'schdeule.')
+
+    for game in target_team_schedule:
+        target_team_indexes.append(game.boxscore_index)
 
     def indexconverter(index):
         count = 0
@@ -180,7 +181,7 @@ for team in team_abbrev:
         target_team_five_indexes.append(target_team_indexes[position])
 
     print('Found boxscore indexes of ' + team)
-    print(target_team_five_indexes)
+    
     # store each Boxscore
     first_game = Boxscore(target_team_five_indexes[0])
     second_game = Boxscore(target_team_five_indexes[1])
