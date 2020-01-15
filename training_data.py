@@ -71,6 +71,8 @@ def date_generator():
 
         try:
             random_date_list = pickle.load(date_pickle_file)
+            date_pickle_file.close()
+
 
         except:
             date_pickle_file.close()
@@ -256,28 +258,28 @@ for team in team_abbrev:
     print('Gathered 5 game stats and seperated points of ' + team)
 
     loaded_five_games_df = pd.DataFrame()
+    
+    try:
+        five_games_pickle_file = open('training_five_games_pickle.txt', 'rb')
+        loaded_five_games_df = pickle.load(five_games_pickle_file)
+        five_games_pickle_file.close()
 
-    def pickle_five_games():
-        global loaded_five_games_df
-        loaded_five_games_df = loaded_five_games_df.append(target_five_games_df, ignore_index=True)
-        
+    except:
+        five_games_pickle_file = open('training_five_games_pickle.txt', 'wb')
+        five_games_pickle_file.close()
+        five_games_pickle_file = open('training_five_games_pickle.txt', 'rb')
+
         try:
-            five_games_pickle_file = open('training_five_games_pickle.txt', 'rb')
             loaded_five_games_df = pickle.load(five_games_pickle_file)
             five_games_pickle_file.close()
 
         except:
-            five_games_pickle_file = open('training_five_games_pickle.txt', 'wb')
             five_games_pickle_file.close()
-            five_games_pickle_file = open('training_five_games_pickle.txt', 'rb')
 
-            try:
-                loaded_five_games_df = pickle.load(five_games_pickle_file)
+    loaded_five_games_df = loaded_five_games_df.append(target_five_games_df, ignore_index=True)
 
-            except:
-                five_games_pickle_file.close()
-                pickle_five_games()
-
-    pickle_five_games()  
+    five_games_pickle_file = open('training_five_games_pickle.txt', 'wb')
+    pickle.dump(loaded_five_games_df, five_games_pickle_file)
+    five_games_pickle_file.close()
 
     print(loaded_five_games_df)
