@@ -17,7 +17,7 @@ from sportsreference.nba.schedule import Schedule
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-year = '2012'
+year = '2017'
 
 # generate random date
 def date_generator():
@@ -254,4 +254,3 @@ for team in team_abbrev:
         target_five_games_points_df = target_five_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
 
     print('Gathered 5 game stats and seperated points of ' + team)
-    print(target_five_games_points_df, target_five_games_df)
