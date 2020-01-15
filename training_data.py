@@ -254,3 +254,30 @@ for team in team_abbrev:
         target_five_games_points_df = target_five_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
 
     print('Gathered 5 game stats and seperated points of ' + team)
+
+    loaded_five_games_df = pd.DataFrame()
+
+    def pickle_five_games():
+        global loaded_five_games_df
+        loaded_five_games_df = loaded_five_games_df.append(target_five_games_df, ignore_index=True)
+        
+        try:
+            five_games_pickle_file = open('training_five_games_pickle.txt', 'rb')
+            loaded_five_games_df = pickle.load(five_games_pickle_file)
+            five_games_pickle_file.close()
+
+        except:
+            five_games_pickle_file = open('training_five_games_pickle.txt', 'wb')
+            five_games_pickle_file.close()
+            five_games_pickle_file = open('training_five_games_pickle.txt', 'rb')
+
+            try:
+                loaded_five_games_df = pickle.load(five_games_pickle_file)
+
+            except:
+                five_games_pickle_file.close()
+                pickle_five_games()
+
+    pickle_five_games()
+
+    print(loaded_five_games_df)
