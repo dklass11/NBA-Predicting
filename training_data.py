@@ -278,6 +278,6 @@ for team in team_abbrev:
                 five_games_pickle_file.close()
                 pickle_five_games()
 
-    pickle_five_games()
+    pickle_five_games()  
 
     print(loaded_five_games_df)
