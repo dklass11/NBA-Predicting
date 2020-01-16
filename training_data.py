@@ -17,7 +17,7 @@ from sportsreference.nba.schedule import Schedule
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-year = '2017'
+year = '2019'
 
 # generate random date
 def date_generator():
