@@ -1,4 +1,4 @@
-# import array, datframe, math, and storing modules
+# import array, datframe, math, and pickling modules
 import numpy as np
 import pandas as pd
 import random as rand
@@ -72,7 +72,6 @@ def date_generator():
         try:
             random_date_list = pickle.load(date_pickle_file)
             date_pickle_file.close()
-
 
         except:
             date_pickle_file.close()
