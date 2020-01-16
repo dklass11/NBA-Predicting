@@ -9,7 +9,6 @@ from keras.models import Sequential
 from keras.layers import Dense
 
 # import nba data fetching module
-import datetime
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
@@ -60,14 +59,14 @@ def date_generator():
     random_date = year + '-' + month + '-' + day
 
     try:
-        date_pickle_file = open(year + '_training_date_pickle.txt', 'rb')
+        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
         date_pickle_file.close()
 
     except:
-        date_pickle_file = open(year + '_training_date_pickle.txt', 'wb')
+        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
         date_pickle_file.close()
-        date_pickle_file = open(year + '_training_date_pickle.txt', 'rb')
+        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
 
         try:
             random_date_list = pickle.load(date_pickle_file)
@@ -83,7 +82,7 @@ def date_generator():
     else:
         date_generator()
 
-    date_pickle_file = open(year + '_training_date_pickle.txt', 'wb')
+    date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
 
@@ -299,14 +298,14 @@ for team in team_abbrev:
     loaded_ten_games_df = pd.DataFrame()
     
     try:
-        ten_games_pickle_file = open('training_ten_games_pickle.txt', 'rb')
+        ten_games_pickle_file = open('training_data_pickle_files\\training_ten_games_pickle.txt', 'rb')
         loaded_ten_games_df = pickle.load(ten_games_pickle_file)
         ten_games_pickle_file.close()
 
     except:
-        ten_games_pickle_file = open('training_ten_games_pickle.txt', 'wb')
+        ten_games_pickle_file = open('training_data_pickle_files\\training_ten_games_pickle.txt', 'wb')
         ten_games_pickle_file.close()
-        ten_games_pickle_file = open('training_ten_games_pickle.txt', 'rb')
+        ten_games_pickle_file = open('training_data_pickle_files\\training_ten_games_pickle.txt', 'rb')
 
         try:
             loaded_ten_games_df = pickle.load(ten_games_pickle_file)
@@ -317,7 +316,7 @@ for team in team_abbrev:
 
     loaded_ten_games_df = loaded_ten_games_df.append(target_ten_games_df, ignore_index=True)
 
-    ten_games_pickle_file = open('training_ten_games_pickle.txt', 'wb')
+    ten_games_pickle_file = open('training_data_pickle_files\\training_ten_games_pickle.txt', 'wb')
     pickle.dump(loaded_ten_games_df, ten_games_pickle_file)
     ten_games_pickle_file.close()
 
