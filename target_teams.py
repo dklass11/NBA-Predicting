@@ -93,7 +93,7 @@ target1_team_index_counts = list()
 for i in target1_team_indexes:
     target1_team_index_counts.append(indexconverter(i))
 
-# compare dates and find previous five game dates
+# compare dates and find previous ten game dates
 target1_index_counter = 0
 
 for count in target1_team_index_counts:
@@ -237,7 +237,7 @@ target2_team_index_counts = list()
 for i in target2_team_indexes:
     target2_team_index_counts.append(indexconverter(i))
 
-# compare dates and find previous five game dates
+# compare dates and find previous ten game dates
 target2_index_counter = 0
 
 for count in target2_team_index_counts:
@@ -354,7 +354,7 @@ target2_ten_games_df = target2_ten_games_df.append(fifth_game_df_2, ignore_index
 target2_ten_games_df = target2_ten_games_df.append(sixth_game_df_2, ignore_index=True)
 target2_ten_games_df = target2_ten_games_df.append(seventh_game_df_2, ignore_index=True)
 target2_ten_games_df = target2_ten_games_df.append(eighth_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(ninth_game_df_2 ignore_index=True)
+target2_ten_games_df = target2_ten_games_df.append(ninth_game_df_2, ignore_index=True)
 target2_ten_games_df = target2_ten_games_df.append(tenth_game_df_2, ignore_index=True)
 
 for_game_list_2 = list([first_game_2, second_game_2, third_game_2, fourth_game_2, fifth_game_2, sixth_game_2, seventh_game_2, eighth_game_2, ninth_game_2, tenth_game_2])
