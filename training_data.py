@@ -1,4 +1,4 @@
-# import array, datframe, math, and pickling modules
+# import math modules
 import numpy as np
 import pandas as pd
 import random as rand
@@ -208,13 +208,6 @@ for team in team_abbrev:
     ninth_game = Boxscore(target_team_ten_indexes[8])
     tenth_game = Boxscore(target_team_ten_indexes[9])
 
-    # create boolean list to show if target team is home
-    home_list = list([False, False, False, False, False, False, False, False, False, False])
-
-    for index in target_team_ten_indexes:
-        if team in index:
-            home_list[target_team_ten_indexes.index(index)] = True
-
     first_game_df = pd.DataFrame()
     second_game_df = pd.DataFrame()
     third_game_df = pd.DataFrame()
@@ -278,7 +271,17 @@ for team in team_abbrev:
                                     'date', 'location'])
 
     target_ten_games_df = first_game_df
+
+    for_game_df_list = list([second_game_df, third_game_df, fourth_game_df, fifth_game_df,
+                    sixth_game_df, seventh_game_df, eighth_game_df, ninth_game_df, tenth_game_df])
+
+    for df in for_game_df_list:
+        for column in df:
+            df = df.rename(columns={column + str(for_game_df_list.index[df])})
+
+    
     target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True)
+    '''
     target_ten_games_df = target_ten_games_df.append(third_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(fourth_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(fifth_game_df, ignore_index=True)
@@ -287,7 +290,7 @@ for team in team_abbrev:
     target_ten_games_df = target_ten_games_df.append(eighth_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(ninth_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(tenth_game_df, ignore_index=True)
-
+    '''
     for_game_list = list([first_game, second_game, third_game, fourth_game, fifth_game, sixth_game, seventh_game, eighth_game, ninth_game, tenth_game])
     target_ten_games_points_df = pd.DataFrame()
 
