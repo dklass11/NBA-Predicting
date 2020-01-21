@@ -277,11 +277,10 @@ for team in team_abbrev:
 
     for df in for_game_df_list:
         for column in df:
-            df = df.rename(columns={column + str(for_game_df_list.index[df])})
+            df = df.rename(columns={column: str(column) + str(for_game_df_list.index([df]))}, inplace=True)
 
     
     target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True)
-    '''
     target_ten_games_df = target_ten_games_df.append(third_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(fourth_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(fifth_game_df, ignore_index=True)
@@ -290,7 +289,7 @@ for team in team_abbrev:
     target_ten_games_df = target_ten_games_df.append(eighth_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(ninth_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(tenth_game_df, ignore_index=True)
-    '''
+    print(target_ten_games_df)
     for_game_list = list([first_game, second_game, third_game, fourth_game, fifth_game, sixth_game, seventh_game, eighth_game, ninth_game, tenth_game])
     target_ten_games_points_df = pd.DataFrame()
 
