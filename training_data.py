@@ -276,9 +276,7 @@ for team in team_abbrev:
                     sixth_game_df, seventh_game_df, eighth_game_df, ninth_game_df, tenth_game_df])
 
     for df in for_game_df_list:
-        for column in df:
-            df = df.rename(columns={column: str(column) + str(for_game_df_list.index([df]))}, inplace=True)
-
+        df = df.rename(columns={}, inplace=True)
     
     target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True)
     target_ten_games_df = target_ten_games_df.append(third_game_df, ignore_index=True)
