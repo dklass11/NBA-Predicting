@@ -237,7 +237,7 @@ for team in team_abbrev:
     second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                     'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                     'date', 'location'])
-                                    
+    
     third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                     'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                     'date', 'location'])
@@ -275,18 +275,21 @@ for team in team_abbrev:
     for_game_df_list = list([second_game_df, third_game_df, fourth_game_df, fifth_game_df,
                     sixth_game_df, seventh_game_df, eighth_game_df, ninth_game_df, tenth_game_df])
 
-    for df in for_game_df_list:
-        df = df.rename(columns={}, inplace=True)
+    for iterable, gamedf in enumerate(for_game_df_list):
+        for column in gamedf:
+            print(column)
+            gamedf.rename(columns={column: column + str(iterable)+'2')}, inplace=True)
     
-    target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(third_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(fourth_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(fifth_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(sixth_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(seventh_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(eighth_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(ninth_game_df, ignore_index=True)
-    target_ten_games_df = target_ten_games_df.append(tenth_game_df, ignore_index=True)
+    print(second_game_df)
+    target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(third_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(fourth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(fifth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(sixth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(seventh_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(eighth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(ninth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(tenth_game_df, ignore_index=True, sort=False)
     print(target_ten_games_df)
     for_game_list = list([first_game, second_game, third_game, fourth_game, fifth_game, sixth_game, seventh_game, eighth_game, ninth_game, tenth_game])
     target_ten_games_points_df = pd.DataFrame()
