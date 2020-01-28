@@ -125,9 +125,6 @@ def date_generator():
 
 date_generator()
 
-
-
-
 class Team():
 
     '''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. '''
@@ -218,12 +215,41 @@ class Team():
             dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
                                         'losing_name', 'losing_abbr', 'home_wins',
                                         'away_wins', 'date', 'location'])
+            
+            all_games_df = all_games_df.append(dataframe_list[i], ignore_index=True, sort=False)
 
-            all_games_df.append(dataframe_list[i], ignore_index=True, sort=False)
-        
-        for iterable, df in enumerate(all_games_df):
-            for column in df:
-                df.rename(columns={column: str(column) + str(int(iterable)+2)}, inplace=True)
+
+        all_points_df = pd.DataFrame()
+
+        for df in all_games_df:
+            all_points_df = all_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True, sort=False)
+
+        print('Gathered past 10 game stats and seperated points of ' + team)
+
+        loaded_ten_games_df = pd.DataFrame()
+
+        try:
+            ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'rb')
+            loaded_ten_games_df = pickle.load(ten_games_pickle_file)
+            ten_games_pickle_file.close()
+
+        except:
+            ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'wb')
+            ten_games_pickle_file.close()
+            ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'rb')
+
+            try:
+                loaded_ten_games_df = pickle.load(ten_games_pickle_file)
+                ten_games_pickle_file.close()
+
+            except:
+                ten_games_pickle_file.close()
+
+        loaded_ten_games_df = loaded_ten_games_df.append(target_ten_games_df, ignore_index=True)
+
+        ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'wb')
+        pickle.dump(loaded_ten_games_df, ten_games_pickle_file)
+        ten_games_pickle_file.close()
 
 phi = Team('PHI', year, 10)
 
@@ -395,6 +421,11 @@ for team in team_abbrev:
     for_game_list = list([first_game, second_game, third_game, fourth_game, fifth_game, sixth_game, seventh_game, eighth_game, ninth_game, tenth_game])
     target_ten_games_points_df = pd.DataFrame()
 ##
+        
+        for iterable, df in enumerate(dataframe_list):
+            for column in df:
+                df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
+        
 for game in for_game_list:
     target_ten_games_points_df = target_ten_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
 
