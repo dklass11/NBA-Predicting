@@ -129,15 +129,17 @@ class Team():
 
     '''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. '''
 
-    def __init__(self, team, year, n_games):
+    def __init__(self, team):
         self.team = team
+    
+    def gather_dataframes(self, year, n_games):
         self.year = year
-        self.schedule = Schedule(self.team, year=year) #target_team_schedule
         self.n_games = n_games
+        self.schedule = Schedule(self.team, year=year)
 
         print('Acquired ' + self.team + "'s " + 'schdeule.')
 
-        indexes = list() #target_team_indexes
+        indexes = list()
         for game in self.schedule:
             indexes.append(game.boxscore_index)
         
@@ -172,13 +174,13 @@ class Team():
             return count
 
         # run indexes through converter
-        index_counts = list() #target_team_index_counts
+        index_counts = list()
 
         for index in indexes:
             index_counts.append(indexconverter(index))
 
         # compare dates and find previous specified numnber of game dates
-        index_counter = 0 #target_index_counter
+        index_counter = 0
         
         for count in index_counts:
             if index_counter == 0:
@@ -193,7 +195,7 @@ class Team():
 
         # use index counts to find positions of Boxscore indexes
         multiple_positions = list()
-        self.multiple_indexes = list() #target_team_ten_indexes
+        self.multiple_indexes = list()
 
         for index_count in multiple_index_counts:
             multiple_positions.append(index_counts.index(index_count))
@@ -220,11 +222,12 @@ class Team():
 
 
         all_points_df = pd.DataFrame()
+        df_columns = pd.DataFrame()
+        
+        df_columns = all_games_df[['home_points', 'away_points']]
+        all_points_df = all_points_df.append(df_columns, ignore_index=True, sort=False)
 
-        for df in all_games_df:
-            all_points_df = all_points_df.append(df.dataframe[['home_points', 'away_points']], ignore_index=True, sort=False)
-
-        print('Seperated points scored from ' + self.team + "'s dattaframe.")
+        print('Seperated points scored from ' + self.team + "'s dataframe.")
 
         loaded_games_df = pd.DataFrame()
 
@@ -251,4 +254,7 @@ class Team():
         pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
 
-phi = Team('PHI', year, 10)
+
+sixers = Team('PHI')
+
+sixers.gather_dataframes(year, 10)
