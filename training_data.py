@@ -277,8 +277,7 @@ for team in team_abbrev:
 
     for iterable, gamedf in enumerate(for_game_df_list):
         for column in gamedf:
-            print(column)
-            gamedf.rename(columns={column: column + str(iterable)+'2')}, inplace=True)
+            gamedf.rename(columns={column: str(column) + str(int(iterable)+2)}, inplace=True)
     
     print(second_game_df)
     target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True, sort=False)
