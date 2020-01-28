@@ -223,3 +223,207 @@ home_five_team_uri = list()
 print(old_home_five_team_uri)
 
 '''
+
+'''
+for team in team_abbrev:
+    target_team_schedule = Schedule(team, year=year)
+    target_team_indexes = list()
+
+    print('Acquired ' + team + "'s " + 'schdeule.')
+
+    for game in target_team_schedule:
+        target_team_indexes.append(game.boxscore_index)
+
+    def indexconverter(index):
+        count = 0
+
+        # convert month to number of days
+        if index[4:6] == '10':
+            count = 0
+
+        elif index[4:6] == '11':
+            count = 31
+
+        elif index[4:6] == '12':
+            count = 61
+
+        elif index[4:6] == '01':
+            count = 92
+
+        elif index[4:6] == '02':
+            count = 123
+
+        elif index[4:6] == '03':
+            count = 152
+
+        elif index[4:6] == '04':
+            count = 183
+
+        # add number of days to count
+        count += int(index[6:8])
+
+        return count
+
+    # run indexes through converter
+    target_team_index_counts = list()
+
+    for i in target_team_indexes:
+        target_team_index_counts.append(indexconverter(i))
+
+    # compare dates and find previous ten game dates
+    target_index_counter = 0
+    
+    for count in target_team_index_counts:
+        if target_index_counter == 0:
+            if random_date_count <= count:
+                position = target_team_index_counts.index(count)
+
+                # use index counts to find positions of Boxscore indexes
+                target_team_ten_index_counts = target_team_index_counts[::-1]
+                target_team_ten_index_counts = target_team_ten_index_counts[(82-position):((82-position)+10)]
+
+                target_index_counter = 1
+
+    # use index counts to find positions of Boxscore indexes
+    target_team_ten_pos = list()
+    target_team_ten_indexes = list()
+
+    for index_count in target_team_ten_index_counts:
+        target_team_ten_pos.append(target_team_index_counts.index(index_count))
+
+    for position in target_team_ten_pos:
+        target_team_ten_indexes.append(target_team_indexes[position])
+
+    print('Found boxscore indexes of ' + team)
+    
+    # store each Boxscore
+    first_game = Boxscore(target_team_ten_indexes[0])
+    second_game = Boxscore(target_team_ten_indexes[1])
+    third_game = Boxscore(target_team_ten_indexes[2])
+    fourth_game = Boxscore(target_team_ten_indexes[3])
+    fifth_game = Boxscore(target_team_ten_indexes[4])
+    sixth_game = Boxscore(target_team_ten_indexes[5])
+    seventh_game = Boxscore(target_team_ten_indexes[6])
+    eighth_game = Boxscore(target_team_ten_indexes[7])
+    ninth_game = Boxscore(target_team_ten_indexes[8])
+    tenth_game = Boxscore(target_team_ten_indexes[9])
+
+    first_game_df = pd.DataFrame()
+    second_game_df = pd.DataFrame()
+    third_game_df = pd.DataFrame()
+    fourth_game_df = pd.DataFrame()
+    fifth_game_df = pd.DataFrame()
+    sixth_game_df = pd.DataFrame()
+    seventh_game_df = pd.DataFrame()
+    eighth_game_df = pd.DataFrame()
+    ninth_game_df = pd.DataFrame()
+    tenth_game_df = pd.DataFrame()
+
+    first_game_df = first_game.dataframe
+    second_game_df = second_game.dataframe
+    third_game_df = third_game.dataframe
+    fourth_game_df = fourth_game.dataframe
+    fifth_game_df = fifth_game.dataframe
+    sixth_game_df = sixth_game.dataframe
+    seventh_game_df = seventh_game.dataframe
+    eighth_game_df = eighth_game.dataframe
+    ninth_game_df = ninth_game.dataframe
+    tenth_game_df = tenth_game.dataframe
+
+    first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+                                    
+    second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+    
+    third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+
+    fourth_game_df = fourth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+
+    fifth_game_df = fifth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+    
+    sixth_game_df = sixth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                'date', 'location'])
+
+    seventh_game_df = seventh_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+
+    eighth_game_df = eighth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+
+    ninth_game_df = ninth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+
+    tenth_game_df = tenth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                    'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
+                                    'date', 'location'])
+
+    target_ten_games_df = first_game_df
+
+    for_game_df_list = list([second_game_df, third_game_df, fourth_game_df, fifth_game_df,
+                    sixth_game_df, seventh_game_df, eighth_game_df, ninth_game_df, tenth_game_df])
+
+    for iterable, gamedf in enumerate(for_game_df_list):
+        for column in gamedf:
+            gamedf.rename(columns={column: str(column) + str(int(iterable)+2)}, inplace=True)
+    
+    target_ten_games_df = target_ten_games_df.append(second_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(third_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(fourth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(fifth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(sixth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(seventh_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(eighth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(ninth_game_df, ignore_index=True, sort=False)
+    target_ten_games_df = target_ten_games_df.append(tenth_game_df, ignore_index=True, sort=False)
+    
+    for_game_list = list([first_game, second_game, third_game, fourth_game, fifth_game, sixth_game, seventh_game, eighth_game, ninth_game, tenth_game])
+    target_ten_games_points_df = pd.DataFrame()
+##
+        
+        for iterable, df in enumerate(dataframe_list):
+            for column in df:
+                df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
+        
+for game in for_game_list:
+    target_ten_games_points_df = target_ten_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
+
+print('Gathered past 10 game stats and seperated points of ' + team)
+
+loaded_ten_games_df = pd.DataFrame()
+
+try:
+    ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'rb')
+    loaded_ten_games_df = pickle.load(ten_games_pickle_file)
+    ten_games_pickle_file.close()
+
+except:
+    ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'wb')
+    ten_games_pickle_file.close()
+    ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'rb')
+
+    try:
+        loaded_ten_games_df = pickle.load(ten_games_pickle_file)
+        ten_games_pickle_file.close()
+
+    except:
+        ten_games_pickle_file.close()
+
+loaded_ten_games_df = loaded_ten_games_df.append(target_ten_games_df, ignore_index=True)
+
+ten_games_pickle_file = open('training_data_pickle_files\\' + random_date + '_ten_games_pickle.txt', 'wb')
+pickle.dump(loaded_ten_games_df, ten_games_pickle_file)
+ten_games_pickle_file.close()
+'''
