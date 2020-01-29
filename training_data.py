@@ -224,16 +224,14 @@ class Team():
             dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
                                         'losing_name', 'losing_abbr', 'home_wins',
                                         'away_wins', 'date', 'location'])
-            
-            
 
-
+        # label each column by what order the game was played in
         for iterable, df in enumerate(dataframe_list):
             for column in df:
                 df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
 
         for i in range(self.n_games):
-            all_games_df = all_games_df.combine(dataframe_list[i], ignore_index=True, sort=False)
+            all_games_df = all_games_df.append(dataframe_list[i], ignore_index=True, sort=False)
 
         print(all_games_df)
         # seperate points scored from each game's dataframe
