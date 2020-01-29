@@ -12,22 +12,24 @@ from keras.layers import Dense
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
-# get random team's full schedule and boxscore indexes
+# initial conditions to capture NBA data
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
 year = '2019'
 
-# generate random date
+# generate a random date to start getting games from
 def date_generator():
-    chance = rand.randint(1, 2)
+    # generate a random month
+    chance = rand.randint(1, 6)
 
-    if chance == 1:
+    if chance <= 4:
         month = '0' + str(rand.randint(1, 4))
 
-    else: 
+    elif chance >= 5: 
         month = str(rand.randint(11, 12))
-        
+    
+    # generate a random day based on month
     if month == '01' or month == '03' or month == '12':
         day = rand.randint(1, 31)
 
@@ -56,9 +58,11 @@ def date_generator():
         else:
             day = str(day)
 
+    # assign the random date from previous findings
     global random_date
     random_date = year + '-' + month + '-' + day
 
+    # retreive training date pickle and check if the same random date had been generated before
     try:
         date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
@@ -118,6 +122,7 @@ def date_generator():
         
         return count
 
+    # run random date through converter
     global random_date_count
     random_date_count = dateconverter(random_date)
 
@@ -132,7 +137,8 @@ class Team():
     def __init__(self, team):
         self.team = team
     
-    def gather_dataframes(self, year, n_games):
+    # gather dataframes from previous specified number of games and year
+    def gatherdf(self, year, n_games):
         self.year = year
         self.n_games = n_games
         self.schedule = Schedule(self.team, year=year)
@@ -187,13 +193,13 @@ class Team():
                 if random_date_count <= count:
                     position = index_counts.index(count)
 
-                    # use index counts to find positions of Boxscore indexes
+                    # use index counts to find positions of boxscore indexes
                     multiple_index_counts = index_counts[::-1]
                     multiple_index_counts = multiple_index_counts[(82-position):((82-position) + self.n_games)]
 
                     index_counter = 1
 
-        # use index counts to find positions of Boxscore indexes
+        # use index counts to find positions of boxscore indexes
         multiple_positions = list()
         self.multiple_indexes = list()
 
@@ -205,6 +211,7 @@ class Team():
 
         print('Found last ' + str(self.n_games) + ' boxscore indexes of ' + self.team + '.')
         
+        # use boxscore indexes to retreive each game's dataframe
         boxscore_list = list()
         dataframe_list = list()
         all_games_df = pd.DataFrame()
@@ -220,7 +227,7 @@ class Team():
             
             all_games_df = all_games_df.append(dataframe_list[i], ignore_index=True, sort=False)
 
-
+        # seperate points scored from each game's dataframe
         all_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
         
@@ -229,6 +236,7 @@ class Team():
 
         print('Seperated points scored from ' + self.team + "'s dataframe.")
 
+        # retreive training games pickle and add acquired dataframes to it
         loaded_games_df = pd.DataFrame()
 
         try:
@@ -254,7 +262,7 @@ class Team():
         pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
 
-
+# test the team class using the sixers
 sixers = Team('PHI')
 
-sixers.gather_dataframes(year, 10)
+sixers.gatherdf(year, 10)
