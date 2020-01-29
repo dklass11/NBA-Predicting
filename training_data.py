@@ -61,7 +61,7 @@ def date_generator():
     # assign the random date from previous findings
     global random_date
     random_date = year + '-' + month + '-' + day
-
+    '''
     # retreive training date pickle and check if the same random date had been generated before
     try:
         date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
@@ -90,7 +90,7 @@ def date_generator():
     date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
-
+    '''
     # convert random date to count
     def dateconverter(date):
         count = 0
@@ -235,7 +235,7 @@ class Team():
         all_points_df = all_points_df.append(df_columns, ignore_index=True, sort=False)
 
         print('Seperated points scored from ' + self.team + "'s dataframe.")
-
+        '''
         # retreive training games pickle and add acquired dataframes to it
         loaded_games_df = pd.DataFrame()
 
@@ -261,7 +261,7 @@ class Team():
         games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'wb')
         pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
-
+        '''
 # test the team class using the sixers
 sixers = Team('PHI')
 
