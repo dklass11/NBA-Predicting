@@ -225,15 +225,27 @@ class Team():
                                         'losing_name', 'losing_abbr', 'home_wins',
                                         'away_wins', 'date', 'location'])
             
-            all_games_df = all_games_df.append(dataframe_list[i], ignore_index=True, sort=False)
+            
 
+
+        for iterable, df in enumerate(dataframe_list):
+            for column in df:
+                df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
+
+        for i in range(self.n_games):
+            all_games_df = all_games_df.combine(dataframe_list[i], ignore_index=True, sort=False)
+
+        print(all_games_df)
         # seperate points scored from each game's dataframe
         all_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
         
-        df_columns = all_games_df[['home_points', 'away_points']]
-        all_points_df = all_points_df.append(df_columns, ignore_index=True, sort=False)
+        df_columns = all_games_df[['home_points0', 'away_points0', 'home_points1', 'away_points1', 'home_points2', 'away_points2',
+                            'home_points3', 'away_points3', 'home_points4', 'away_points4', 'home_points5', 'away_points5', 'away_points7',
+                            'home_points6', 'away_points6', 'home_points7', 'home_points8', 'away_points8', 'home_points9', 'away_points9']]
 
+        all_points_df = all_points_df.append(df_columns, ignore_index=True, sort=False)
+        print(all_points_df)
         print('Seperated points scored from ' + self.team + "'s dataframe.")
         '''
         # retreive training games pickle and add acquired dataframes to it
