@@ -220,7 +220,7 @@ class Team():
     
             dataframe_list.append(boxscore_list[i].dataframe)
 
-            dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
+            dataframe_list[i] = dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
                                         'losing_name', 'losing_abbr', 'home_wins',
                                         'away_wins', 'date', 'location'])
 
@@ -228,7 +228,7 @@ class Team():
         dataframe_column_list = list()
         dataframe_value_list = list()
         new_df_value_list = list()
-
+        
         for iterable, df in enumerate(dataframe_list):
             for column in df:
                 df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
@@ -240,20 +240,14 @@ class Team():
         for iterable, arr in enumerate(dataframe_value_list):
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
+        
+        all_games_df = pd.DataFrame(columns=dataframe_column_list)
 
-        print(new_df_value_list)
-        all_games_df = pd.DataFrame(data=new_df_value_list[0], columns=dataframe_column_list, index=[0])
-
+        all_games_df.loc[0] = new_df_value_list
+        
         print(all_games_df)
 
-        #all_games_df.insert(0, dataframe_column_list, dataframe_list[0])
-
-        #all_games_df = all_games_df.append(dataframe_list[0], ignore_index=True, sort=False)
-        #for i in range(1, self.n_games):
-        #all_games_df.loc[0] = dataframe_list[6]
-
-        
-        # seperate points scored from each game's dataframe
+        # seperate the points score (target data) into seperate dataframes
         all_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
         
