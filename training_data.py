@@ -16,7 +16,7 @@ from sportsreference.nba.schedule import Schedule
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-year = '2019'
+year = '2019' # second year in 2018-2019 syntax
 
 # generate a random date to start getting games from
 def date_generator():
@@ -26,7 +26,7 @@ def date_generator():
     if chance <= 4:
         month = '0' + str(rand.randint(1, 4))
 
-    elif chance >= 5: 
+    elif chance >= 5:
         month = str(rand.randint(11, 12))
     
     # generate a random day based on month
@@ -57,6 +57,10 @@ def date_generator():
             day = '0' + str(day)
         else:
             day = str(day)
+
+    if month == '11' or month == '12':
+        global year
+        year = '2018'
 
     # assign the random date from previous findings
     global random_date
@@ -144,7 +148,7 @@ class Team():
         self.schedule = Schedule(self.team, year=year)
 
         print('Acquired ' + self.team + "'s " + 'schdeule.')
-
+        
         indexes = list()
         for game in self.schedule:
             indexes.append(game.boxscore_index)
@@ -194,8 +198,8 @@ class Team():
                     position = index_counts.index(count)
 
                     # use index counts to find positions of boxscore indexes
-                    multiple_index_counts = index_counts[::-1]
-                    multiple_index_counts = multiple_index_counts[(82-position):((82-position) + self.n_games)]
+                    multiple_index_counts = index_counts
+                    multiple_index_counts = multiple_index_counts[(position-1):(position-(self.n_games+1))]
 
                     index_counter = 1
 
