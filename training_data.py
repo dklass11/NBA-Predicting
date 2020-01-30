@@ -48,7 +48,7 @@ def date_generator():
             day = str(day)
 
     elif month == '04':
-        day = '0' + str(rand.randint(1, 10))
+        day = '0' + str(rand.randint(1, 9))
 
     else:
         day = rand.randint(1, 30)
@@ -214,7 +214,6 @@ class Team():
         # use boxscore indexes to retreive each game's dataframe
         boxscore_list = list()
         dataframe_list = list()
-        all_games_df = pd.DataFrame()
 
         for i in range(self.n_games):
             boxscore_list.append(Boxscore(self.multiple_indexes[i]))
@@ -225,15 +224,37 @@ class Team():
                                         'losing_name', 'losing_abbr', 'home_wins',
                                         'away_wins', 'date', 'location'])
 
-        # label each column by what order the game was played in
+        # label each column by the order that the game was played in
+        dataframe_column_list = list()
+        dataframe_value_list = list()
+        new_df_value_list = list()
+
         for iterable, df in enumerate(dataframe_list):
             for column in df:
                 df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
+                dataframe_column_list.append(str(column) + str(iterable))
 
-        for i in range(self.n_games):
-            all_games_df = all_games_df.append(dataframe_list[i], ignore_index=True, sort=False)
+        for df in dataframe_list:
+            dataframe_value_list.append(df.values)
+        
+        for iterable, arr in enumerate(dataframe_value_list):
+            dataframe_value_list[iterable] = arr.tolist()
+
+        for df in dataframe_value_list:
+            new_df_value_list.append(df)
+
+        print(new_df_value_list)
+        all_games_df = pd.DataFrame(data=new_df_value_list, columns=dataframe_column_list, index=[0])
 
         print(all_games_df)
+
+        #all_games_df.insert(0, dataframe_column_list, dataframe_list[0])
+
+        #all_games_df = all_games_df.append(dataframe_list[0], ignore_index=True, sort=False)
+        #for i in range(1, self.n_games):
+        #all_games_df.loc[0] = dataframe_list[6]
+
+        
         # seperate points scored from each game's dataframe
         all_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
