@@ -239,12 +239,10 @@ class Team():
         
         for iterable, arr in enumerate(dataframe_value_list):
             dataframe_value_list[iterable] = arr.tolist()
-
-        for df in dataframe_value_list:
-            new_df_value_list.append(df)
+            new_df_value_list.extend(dataframe_value_list[iterable][0])
 
         print(new_df_value_list)
-        all_games_df = pd.DataFrame(data=new_df_value_list, columns=dataframe_column_list, index=[0])
+        all_games_df = pd.DataFrame(data=new_df_value_list[0], columns=dataframe_column_list, index=[0])
 
         print(all_games_df)
 
