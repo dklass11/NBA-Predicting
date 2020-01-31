@@ -12,13 +12,8 @@ from keras.layers import Dense
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
-# initial conditions to capture NBA data
-team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
-            'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-year = '2019' # ex: 2020 as in the 2019-2020 season
-
-# generate a random date to start getting games from
+# generate a random date to retreive games from
 def date_generator():
     # generate a random month
     chance = rand.randint(1, 6)
@@ -127,8 +122,7 @@ def date_generator():
     random_date_count = dateconverter(random_date)
 
     print('Generated random date: ' + random_date)
-
-date_generator()
+        
 
 class Team():
 
@@ -136,7 +130,8 @@ class Team():
 
     def __init__(self, team):
         self.team = team
-    
+        date_generator()
+        
     # gather dataframes from previous specified number of games and year
     def gatherdf(self, year, n_games):
         self.year = year
@@ -264,26 +259,34 @@ class Team():
         print('Seperated points scored from ' + self.team + "'s dataframe.")
         
         # retreive training games pickle and add acquired dataframes to it
-        loaded_games = list()
+        loaded_games_df = pd.DataFrame()
 
         try:
-            games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'rb')
-            loaded_games = pickle.load(games_pickle_file)
+            games_pickle_file = open('training_games_pickles\\' + self.team + random_date + '_games_pickle.txt', 'rb')
+            loaded_games_df = pickle.load(games_pickle_file)
             games_pickle_file.close()
 
         except:
-            games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'wb')
+            games_pickle_file = open('training_games_pickles\\' + self.team + random_date + '_games_pickle.txt', 'wb')
             games_pickle_file.close()
 
-        loaded_games.append(training_games_df)
+        loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
 
-        games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'wb')
-        pickle.dump(loaded_games, games_pickle_file)
+        games_pickle_file = open('training_games_pickles\\' + self.team + random_date + '_games_pickle.txt', 'wb')
+        pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
-        
-# test the team class using the sixers
-sixers = Team('PHI')
 
-sixers.gatherdf(year, 10)
 
-print(sixers.training_games, sixers.target_points)
+# initial conditions to capture NBA data
+team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
+            'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
+
+year = '2019' # ex: 2020 as in the 2019-2020 season
+n_games = 10
+
+# gather multiple dataframes for different teams in same year
+for i in range(10):
+    for team in team_abbrev:
+        team = Team(team)
+        team.gatherdf(year, n_games)
+        print(team.training_games)
