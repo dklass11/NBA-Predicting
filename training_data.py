@@ -68,25 +68,18 @@ def date_generator():
     # assign the random date from previous findings
     global random_date
     random_date = boxscore_year + '-' + month + '-' + day
-    '''
+    
     # retreive training date pickle and check if the same random date had been generated before
     try:
-        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
+        date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
         date_pickle_file.close()
 
     except:
-        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
+        date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'wb')
         date_pickle_file.close()
-        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
 
-        try:
-            random_date_list = pickle.load(date_pickle_file)
-            date_pickle_file.close()
-
-        except:
-            date_pickle_file.close()
-            random_date_list = list()
+        random_date_list = list()
 
     if random_date not in random_date_list:
         random_date_list.append(random_date)
@@ -94,10 +87,10 @@ def date_generator():
     else:
         date_generator()
 
-    date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
+    date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
-    '''
+    
     # convert random date to count
     def dateconverter(date):
         count = 0
@@ -267,33 +260,25 @@ class Team():
         training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
 
         print('Seperated points scored from ' + self.team + "'s dataframe.")
-        '''
+        
         # retreive training games pickle and add acquired dataframes to it
-        loaded_games_df = pd.DataFrame()
+        loaded_games = list()
 
         try:
-            games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'rb')
-            loaded_games_df = pickle.load(games_pickle_file)
+            games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'rb')
+            loaded_games = pickle.load(games_pickle_file)
             games_pickle_file.close()
 
         except:
-            games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'wb')
+            games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'wb')
             games_pickle_file.close()
-            games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'rb')
 
-            try:
-                loaded_games_df = pickle.load(games_pickle_file)
-                games_pickle_file.close()
+        loaded_games.append(training_games_df)
 
-            except:
-                games_pickle_file.close()
-
-        loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True)
-
-        games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'wb')
-        pickle.dump(loaded_games_df, games_pickle_file)
+        games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'wb')
+        pickle.dump(loaded_games, games_pickle_file)
         games_pickle_file.close()
-        '''
+        
 # test the team class using the sixers
 sixers = Team('PHI')
 
