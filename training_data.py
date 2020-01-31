@@ -26,7 +26,7 @@ def date_generator():
     if chance <= 4:
         month = '0' + str(rand.randint(1, 4))
 
-    elif chance >= 5: 
+    elif chance >= 5:
         month = str(rand.randint(11, 12))
     
     # generate a random day based on month
@@ -64,6 +64,10 @@ def date_generator():
 
     else:
         boxscore_year = year
+
+    if month == '11' or month == '12':
+        global year
+        year = '2018'
 
     # assign the random date from previous findings
     global random_date
@@ -144,7 +148,7 @@ class Team():
         self.schedule = Schedule(self.team, year=year)
 
         print('Acquired ' + self.team + "'s " + 'schdeule.')
-
+        
         indexes = list()
         for game in self.schedule:
             indexes.append(game.boxscore_index)
