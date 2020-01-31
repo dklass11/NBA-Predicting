@@ -286,4 +286,4 @@ sixers = Team('PHI')
 
 sixers.gatherdf(year, 10)
 
-print(sixers.training_games , sixers.target_points)
+print(sixers.training_games, sixers.target_points)
