@@ -63,6 +63,7 @@ def date_generator():
     # assign the random date from previous findings
     global random_date
     random_date = boxscore_year + '-' + month + '-' + day
+    random_date_team = team + random_date
     
     # retreive training date pickle and check if the same random date had been generated before
     try:
@@ -76,8 +77,8 @@ def date_generator():
 
         random_date_list = list()
 
-    if random_date not in random_date_list:
-        random_date_list.append(random_date)
+    if random_date_team not in random_date_list:
+        random_date_list.append(random_date_team)
 
     else:
         date_generator()
@@ -262,17 +263,17 @@ class Team():
         loaded_games_df = pd.DataFrame()
 
         try:
-            games_pickle_file = open('pickle_files\\game_df_pickle.txt', 'rb')
+            games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
             loaded_games_df = pickle.load(games_pickle_file)
             games_pickle_file.close()
 
         except:
-            games_pickle_file = open('pickle_files\\game_df_pickle.txt', 'wb')
+            games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
             games_pickle_file.close()
 
         loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
 
-        games_pickle_file = open('pickle_files\\game_df_pickle.txt', 'wb')
+        games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
         pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
 
