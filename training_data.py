@@ -122,7 +122,7 @@ def date_generator():
     global random_date_count
     random_date_count = dateconverter(random_date)
 
-    print('Generated random date: ' + random_date)
+    print('Generated new random date: ' + random_date)
         
 
 class Team():
@@ -290,4 +290,4 @@ for i in range(10):
     for team in team_abbrev:
         team = Team(team)
         team.gatherdf(year, n_games)
-        print(team.training_games)
+        print(team.target_points)
