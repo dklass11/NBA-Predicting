@@ -65,10 +65,6 @@ def date_generator():
     else:
         boxscore_year = year
 
-    if month == '11' or month == '12':
-        global year
-        year = '2018'
-
     # assign the random date from previous findings
     global random_date
     random_date = boxscore_year + '-' + month + '-' + day
