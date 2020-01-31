@@ -205,13 +205,13 @@ class Team():
 
         # use index counts to find positions of boxscore indexes
         multiple_positions = list()
-        self.multiple_indexes = list()
+        multiple_indexes = list()
 
         for index_count in multiple_index_counts:
             multiple_positions.append(index_counts.index(index_count))
 
         for position in multiple_positions:
-            self.multiple_indexes.append(indexes[position])
+            multiple_indexes.append(indexes[position])
 
         print('Found last ' + str(self.n_games - 1) + ' boxscore indexes of ' + self.team + '.')
         
@@ -220,7 +220,7 @@ class Team():
         dataframe_list = list()
 
         for i in range(self.n_games):
-            boxscore_list.append(Boxscore(self.multiple_indexes[i]))
+            boxscore_list.append(Boxscore(multiple_indexes[i]))
     
             dataframe_list.append(boxscore_list[i].dataframe)
 
@@ -255,9 +255,11 @@ class Team():
         
         df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
         target_points_df = target_points_df.append(df_columns, ignore_index=True, sort=False)
+        self.target_points = target_points_df
 
         # filter out the most recent (target) game from the training data
         training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
+        self.training_games = training_games_df
 
         print('Seperated points scored from ' + self.team + "'s dataframe.")
         
@@ -283,3 +285,5 @@ class Team():
 sixers = Team('PHI')
 
 sixers.gatherdf(year, 10)
+
+print(sixers.training_games , sixers.target_points)
