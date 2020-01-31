@@ -16,7 +16,7 @@ from sportsreference.nba.schedule import Schedule
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-year = '2019' # second year in 2018-2019 syntax
+year = '2019' # ex: 2020 as in the 2019-2020 season
 
 # generate a random date to start getting games from
 def date_generator():
@@ -48,7 +48,7 @@ def date_generator():
             day = str(day)
 
     elif month == '04':
-        day = '0' + str(rand.randint(1, 9))
+        day = '0' + str(rand.randint(1, 9)) # limit because of the playoffs
 
     else:
         day = rand.randint(1, 30)
@@ -57,6 +57,13 @@ def date_generator():
             day = '0' + str(day)
         else:
             day = str(day)
+    
+    if month == '11' or month == '12':
+        global boxscore_year
+        boxscore_year = str(int(year) - 1)
+
+    else:
+        boxscore_year = year
 
     if month == '11' or month == '12':
         global year
@@ -64,26 +71,19 @@ def date_generator():
 
     # assign the random date from previous findings
     global random_date
-    random_date = year + '-' + month + '-' + day
-    '''
+    random_date = boxscore_year + '-' + month + '-' + day
+    
     # retreive training date pickle and check if the same random date had been generated before
     try:
-        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
+        date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
         date_pickle_file.close()
 
     except:
-        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
+        date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'wb')
         date_pickle_file.close()
-        date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'rb')
 
-        try:
-            random_date_list = pickle.load(date_pickle_file)
-            date_pickle_file.close()
-
-        except:
-            date_pickle_file.close()
-            random_date_list = list()
+        random_date_list = list()
 
     if random_date not in random_date_list:
         random_date_list.append(random_date)
@@ -91,10 +91,10 @@ def date_generator():
     else:
         date_generator()
 
-    date_pickle_file = open('training_date_pickle_files\\' + year + '_training_date_pickle.txt', 'wb')
+    date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
-    '''
+    
     # convert random date to count
     def dateconverter(date):
         count = 0
@@ -144,7 +144,7 @@ class Team():
     # gather dataframes from previous specified number of games and year
     def gatherdf(self, year, n_games):
         self.year = year
-        self.n_games = n_games
+        self.n_games = n_games + 1
         self.schedule = Schedule(self.team, year=year)
 
         print('Acquired ' + self.team + "'s " + 'schdeule.')
@@ -199,28 +199,32 @@ class Team():
 
                     # use index counts to find positions of boxscore indexes
                     multiple_index_counts = index_counts
-                    multiple_index_counts = multiple_index_counts[(position-1):(position-(self.n_games+1))]
+
+                    try:
+                        multiple_index_counts = multiple_index_counts[((position) - self.n_games):(position)]
+                    except:
+                        date_generator()
 
                     index_counter = 1
 
         # use index counts to find positions of boxscore indexes
         multiple_positions = list()
-        self.multiple_indexes = list()
+        multiple_indexes = list()
 
         for index_count in multiple_index_counts:
             multiple_positions.append(index_counts.index(index_count))
 
         for position in multiple_positions:
-            self.multiple_indexes.append(indexes[position])
+            multiple_indexes.append(indexes[position])
 
-        print('Found last ' + str(self.n_games) + ' boxscore indexes of ' + self.team + '.')
+        print('Found last ' + str(self.n_games - 1) + ' boxscore indexes of ' + self.team + '.')
         
         # use boxscore indexes to retreive each game's dataframe
         boxscore_list = list()
         dataframe_list = list()
 
         for i in range(self.n_games):
-            boxscore_list.append(Boxscore(self.multiple_indexes[i]))
+            boxscore_list.append(Boxscore(multiple_indexes[i]))
     
             dataframe_list.append(boxscore_list[i].dataframe)
 
@@ -245,51 +249,45 @@ class Team():
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
         
-        all_games_df = pd.DataFrame(columns=dataframe_column_list)
+        training_games_df = pd.DataFrame(columns=dataframe_column_list)
 
-        all_games_df.loc[0] = new_df_value_list
-        
-        print(all_games_df)
+        training_games_df.loc[0] = new_df_value_list
 
-        # seperate the points score (target data) into seperate dataframes
-        all_points_df = pd.DataFrame()
+        # seperate the points scored (target data) into seperate dataframes
+        target_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
         
-        df_columns = all_games_df[['home_points0', 'away_points0', 'home_points1', 'away_points1', 'home_points2', 'away_points2',
-                            'home_points3', 'away_points3', 'home_points4', 'away_points4', 'home_points5', 'away_points5', 'away_points7',
-                            'home_points6', 'away_points6', 'home_points7', 'home_points8', 'away_points8', 'home_points9', 'away_points9']]
+        df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
+        target_points_df = target_points_df.append(df_columns, ignore_index=True, sort=False)
+        self.target_points = target_points_df
 
-        all_points_df = all_points_df.append(df_columns, ignore_index=True, sort=False)
-        print(all_points_df)
+        # filter out the most recent (target) game from the training data
+        training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
+        self.training_games = training_games_df
+
         print('Seperated points scored from ' + self.team + "'s dataframe.")
-        '''
+        
         # retreive training games pickle and add acquired dataframes to it
-        loaded_games_df = pd.DataFrame()
+        loaded_games = list()
 
         try:
-            games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'rb')
-            loaded_games_df = pickle.load(games_pickle_file)
+            games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'rb')
+            loaded_games = pickle.load(games_pickle_file)
             games_pickle_file.close()
 
         except:
-            games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'wb')
+            games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'wb')
             games_pickle_file.close()
-            games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'rb')
 
-            try:
-                loaded_games_df = pickle.load(games_pickle_file)
-                games_pickle_file.close()
+        loaded_games.append(training_games_df)
 
-            except:
-                games_pickle_file.close()
-
-        loaded_games_df = loaded_games_df.append(all_games_df, ignore_index=True)
-
-        games_pickle_file = open('training_games_pickle_files\\' + random_date + '_games_pickle.txt', 'wb')
-        pickle.dump(loaded_games_df, games_pickle_file)
+        games_pickle_file = open('training_games_pickles\\' + random_date + '_games_pickle.txt', 'wb')
+        pickle.dump(loaded_games, games_pickle_file)
         games_pickle_file.close()
-        '''
+        
 # test the team class using the sixers
 sixers = Team('PHI')
 
 sixers.gatherdf(year, 10)
+
+print(sixers.training_games , sixers.target_points)
