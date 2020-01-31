@@ -66,12 +66,12 @@ def date_generator():
     
     # retreive training date pickle and check if the same random date had been generated before
     try:
-        date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'rb')
+        date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
         date_pickle_file.close()
 
     except:
-        date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'wb')
+        date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
         date_pickle_file.close()
 
         random_date_list = list()
@@ -82,7 +82,7 @@ def date_generator():
     else:
         date_generator()
 
-    date_pickle_file = open('training_date_pickles\\' + year + '_training_date_pickle.txt', 'wb')
+    date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
     
@@ -262,17 +262,17 @@ class Team():
         loaded_games_df = pd.DataFrame()
 
         try:
-            games_pickle_file = open('training_games_pickles\\' + self.team + random_date + '_games_pickle.txt', 'rb')
+            games_pickle_file = open('pickle_files\\game_df_pickle.txt', 'rb')
             loaded_games_df = pickle.load(games_pickle_file)
             games_pickle_file.close()
 
         except:
-            games_pickle_file = open('training_games_pickles\\' + self.team + random_date + '_games_pickle.txt', 'wb')
+            games_pickle_file = open('pickle_files\\game_df_pickle.txt', 'wb')
             games_pickle_file.close()
 
         loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
 
-        games_pickle_file = open('training_games_pickles\\' + self.team + random_date + '_games_pickle.txt', 'wb')
+        games_pickle_file = open('pickle_files\\game_df_pickle.txt', 'wb')
         pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
 
