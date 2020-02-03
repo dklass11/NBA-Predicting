@@ -12,6 +12,8 @@ from keras.layers import Dense
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
+# initialize any needed variables
+game_df_bool = True
 
 # generate a random date to retreive games from
 def date_generator():
@@ -259,21 +261,26 @@ class Team():
         
         # retreive training games pickle and add acquired dataframes to it
         loaded_games_df = pd.DataFrame()
+        global game_df_bool
 
-        try:
-            games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
-            loaded_games_df = pickle.load(games_pickle_file)
-            games_pickle_file.close()
+        if game_df_bool == True:
+            try:
+                games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
+                loaded_games_df = pickle.load(games_pickle_file)
+                print(loaded_games_df)
+                games_pickle_file.close()
+                game_df_bool = False
 
-        except:
+            except:
+                games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
+                games_pickle_file.close()
+                game_df_bool = False
+
+            loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
+
             games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
+            pickle.dump(loaded_games_df, games_pickle_file)
             games_pickle_file.close()
-
-        loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
-
-        games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
-        pickle.dump(loaded_games_df, games_pickle_file)
-        games_pickle_file.close()
 
 
 # initial conditions to capture NBA data
