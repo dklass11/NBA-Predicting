@@ -16,13 +16,13 @@ from sportsreference.nba.schedule import Schedule
 # generate a random date to retreive games from
 def date_generator():
     # generate a random month
-    chance = rand.randint(1, 6)
+    chance = rand.randint(1, 4)
 
-    if chance <= 4:
-        month = '0' + str(rand.randint(1, 4))
+    if chance <= 3:
+        month = '0' + str(rand.randint(1, 3))
 
-    elif chance >= 5:
-        month = str(rand.randint(11, 12))
+    elif chance == 4:
+        month = '12'
     
     # generate a random day based on month
     if month == '01' or month == '03' or month == '12':
@@ -42,9 +42,6 @@ def date_generator():
         else:
             day = str(day)
 
-    elif month == '04':
-        day = '0' + str(rand.randint(1, 9)) # limit because of the playoffs
-
     else:
         day = rand.randint(1, 30)
 
@@ -53,7 +50,7 @@ def date_generator():
         else:
             day = str(day)
     
-    if month == '11' or month == '12':
+    if month == '12':
         global boxscore_year
         boxscore_year = str(int(year) - 1)
 
@@ -129,15 +126,16 @@ class Team():
 
     '''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. '''
 
-    def __init__(self, team):
+    def __init__(self, team, year):
         self.team = team
+        self.year = year
+
         date_generator()
         
     # gather dataframes from previous specified number of games and year
-    def gatherdf(self, year, n_games):
-        self.year = year
+    def gatherdf(self, n_games):
         self.n_games = n_games + 1
-        self.schedule = Schedule(self.team, year=year)
+        self.schedule = Schedule(self.team, year=self.year)
 
         print('Acquired ' + self.team + "'s " + 'schdeule.')
         
@@ -282,12 +280,33 @@ class Team():
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
             'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-year = '2019' # ex: 2020 as in the 2019-2020 season
+current_year = '2020'
+
 n_games = 10
 
 # gather multiple dataframes for different teams in same year
-for i in range(10):
+str_year_list = list()
+
+for year in range(2000, int(current_year)):
+    str_year_list.append(str(year))
+
+for year in str_year_list:
     for team in team_abbrev:
-        team = Team(team)
-        team.gatherdf(year, n_games)
+        if int(year) <= 2012:
+            team_abbrev[2] = 'NJN'
+
+        else:
+            team_abbrev = 'BRK'
+        
+        if int(year) <= 2014:
+            team_abbrev[4] = 'CHA'
+
+        if int(year) <= 2002:
+            team_abbrev[4] = 'CHH'
+
+        else:
+            team_abbrev[4] = 'CHO'
+
+        team = Team(team, year)
+        team.gatherdf(n_games)
         print(team.target_points)
