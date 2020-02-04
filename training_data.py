@@ -242,15 +242,23 @@ class Team():
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
         
-        training_games_df = pd.DataFrame(columns=dataframe_column_list, index=[self.team + random_date], data=new_df_value_list)
+
+        index = self.team + random_date
+        training_games_df = pd.DataFrame(columns=dataframe_column_list, index=[index])
+
+        training_games_df.loc[0] = new_df_value_list
 
         #training_games_df.loc[self.team + random_date] = new_df_value_list
 
         # seperate the points scored (target data) into seperate dataframes
         df_columns = pd.DataFrame()
+        
         df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
-
-        target_points_df = pd.DataFrame(index=[self.team + random_date], data=df_column)
+        print(df_columns)
+        target_points_df = pd.DataFrame(columns=['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)], index=[index])
+        
+        target_points_df.loc[index] = df_columns
+        print(target_points_df)
         self.target_points = target_points_df
 
         # filter out the most recent (target) game from the training data
