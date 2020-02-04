@@ -270,14 +270,14 @@ class Team():
                 loaded_games_df = pickle.load(games_pickle_file)
                 games_pickle_file.close()
                 game_df_bool = False
-
+                
             except:
                 games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
                 games_pickle_file.close()
                 game_df_bool = False
 
             loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
-
+            
             games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
             pickle.dump(loaded_games_df, games_pickle_file)
             games_pickle_file.close()
@@ -292,14 +292,14 @@ class Team():
                 loaded_points_df = pickle.load(points_pickle_file)
                 points_pickle_file.close()
                 points_df_bool = False
-
+                
             except:
                 points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
                 points_pickle_file.close()
                 points_df_bool = False
 
             loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
-
+            
             points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
             pickle.dump(loaded_points_df, points_pickle_file)
             points_pickle_file.close()
@@ -324,7 +324,7 @@ for year in str_year_list:
             team_abbrev[2] = 'NJN'
 
         else:
-            team_abbrev = 'BRK'
+            team_abbrev[2] = 'BRK'
         
         if int(year) <= 2014:
             team_abbrev[4] = 'CHA'
