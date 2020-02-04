@@ -14,6 +14,7 @@ from sportsreference.nba.schedule import Schedule
 
 # initialize any needed variables
 game_df_bool = True
+points_df_bool = True
 
 # generate a random date to retreive games from
 def date_generator():
@@ -267,7 +268,6 @@ class Team():
             try:
                 games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
                 loaded_games_df = pickle.load(games_pickle_file)
-                print(loaded_games_df)
                 games_pickle_file.close()
                 game_df_bool = False
 
@@ -282,6 +282,27 @@ class Team():
             pickle.dump(loaded_games_df, games_pickle_file)
             games_pickle_file.close()
 
+        # do the same for target points
+        loaded_points_df = pd.DataFrame()
+        global points_df_bool
+
+        if points_df_bool == True:
+            try:
+                points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
+                loaded_points_df = pickle.load(points_pickle_file)
+                points_pickle_file.close()
+                points_df_bool = False
+
+            except:
+                points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
+                points_pickle_file.close()
+                points_df_bool = False
+
+            loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
+
+            points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
+            pickle.dump(loaded_points_df, points_pickle_file)
+            points_pickle_file.close()
 
 # initial conditions to capture NBA data
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
