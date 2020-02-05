@@ -249,7 +249,6 @@ class Team():
         # seperate the points scored (target data) into seperate dataframes
         target_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
-        
         df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
         target_points_df = target_points_df.append(df_columns, ignore_index=True, sort=False)
         self.target_points = target_points_df
