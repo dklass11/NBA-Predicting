@@ -130,7 +130,7 @@ class Team():
     '''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. '''
 
     def __init__(self, team, year):
-        self.team = team
+        self.name = team
         self.year = year
 
         date_generator()
@@ -138,9 +138,9 @@ class Team():
     # gather dataframes from previous specified number of games and year
     def gatherdf(self, n_games):
         self.n_games = n_games + 1
-        self.schedule = Schedule(self.team, year=self.year)
+        self.schedule = Schedule(self.name, year=self.year)
 
-        print('Acquired ' + self.team + "'s " + 'schdeule.')
+        print('Acquired ' + self.name + "'s " + 'schdeule.')
         
         indexes = list()
         for game in self.schedule:
@@ -210,7 +210,7 @@ class Team():
         for position in multiple_positions:
             multiple_indexes.append(indexes[position])
 
-        print('Found last ' + str(self.n_games - 1) + ' boxscore indexes of ' + self.team + '.')
+        print('Found last ' + str(self.n_games - 1) + ' boxscore indexes of ' + self.name + '.')
         
         # use boxscore indexes to retreive each game's dataframe
         boxscore_list = list()
@@ -257,7 +257,7 @@ class Team():
         training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
         self.training_games = training_games_df
 
-        print('Seperated points scored from ' + self.team + "'s dataframe.")
+        print('Seperated points scored from ' + self.name + "'s dataframe.")
         
         # retreive training games pickle and add acquired dataframes to it
         loaded_games_df = pd.DataFrame()
@@ -334,6 +334,28 @@ for year in str_year_list:
         else:
             team_abbrev[4] = 'CHO'
 
-        team = Team(team, year)
-        team.gatherdf(n_games)
-        print(team.target_points)
+        if int(year) <= 2001:
+            team_abbrev[14] = 'VAN'
+
+        else:
+            team_abbrev[14] = 'MEM'
+
+        if int(year) <= 2013:
+            team_abbrev[17] = 'NOH'
+
+        else:
+            team_abbrev[17] = 'NOP'
+
+        if int(year) <= 2008:
+            team_abbrev[19] = 'SEA'
+
+        else:
+            team_abbrev[19] = 'OKC'
+
+        try:
+            team = Team(team, year)
+            team.gatherdf(n_games)
+            print(team.target_points)
+
+        except:
+            print('Could not gather ' + team + "'s" + 'dataframes for ' + year)
