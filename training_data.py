@@ -26,14 +26,14 @@ def date_generator():
 
     elif chance == 4:
         month = '12'
-    
+
     # generate a random day based on month
     if month == '01' or month == '03' or month == '12':
         day = rand.randint(1, 31)
 
         if day in range(1, 10):
             day = '0' + str(day)
-        
+
         else:
             day = str(day)
 
@@ -52,7 +52,7 @@ def date_generator():
             day = '0' + str(day)
         else:
             day = str(day)
-    
+
     if month == '12':
         global boxscore_year
         boxscore_year = str(int(year) - 1)
@@ -64,7 +64,7 @@ def date_generator():
     global random_date
     random_date = boxscore_year + '-' + month + '-' + day
     random_date_team = team + random_date
-    
+
     # retreive training date pickle and check if the same random date had been generated before
     try:
         date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
@@ -86,7 +86,7 @@ def date_generator():
     date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
     pickle.dump(random_date_list, date_pickle_file)
     date_pickle_file.close()
-    
+
     # convert random date to count
     def dateconverter(date):
         count = 0
@@ -109,13 +109,13 @@ def date_generator():
 
         elif date[5:7] == '03':
             count = 152
-            
+
         elif date[5:7] == '04':
             count = 183
 
         # add number of days to count
         count += int(date[8:])
-        
+
         return count
 
     # run random date through converter
@@ -123,7 +123,7 @@ def date_generator():
     random_date_count = dateconverter(random_date)
 
     print('Generated new random date: ' + random_date)
-        
+
 
 class Team():
 
@@ -134,18 +134,18 @@ class Team():
         self.year = year
 
         date_generator()
-        
+
     # gather dataframes from previous specified number of games and year
     def gatherdf(self, n_games):
         self.n_games = n_games + 1
         self.schedule = Schedule(self.name, year=self.year)
 
         print('Acquired ' + self.name + "'s " + 'schdeule.')
-        
+
         indexes = list()
         for game in self.schedule:
             indexes.append(game.boxscore_index)
-        
+
         def indexconverter(index):
             count = 0
 
@@ -184,7 +184,7 @@ class Team():
 
         # compare dates and find previous specified numnber of game dates
         index_counter = 0
-        
+
         for count in index_counts:
             if index_counter == 0:
                 if random_date_count <= count:
@@ -211,14 +211,14 @@ class Team():
             multiple_indexes.append(indexes[position])
 
         print('Found last ' + str(self.n_games - 1) + ' boxscore indexes of ' + self.name + '.')
-        
+
         # use boxscore indexes to retreive each game's dataframe
         boxscore_list = list()
         dataframe_list = list()
 
         for i in range(self.n_games):
             boxscore_list.append(Boxscore(multiple_indexes[i]))
-    
+
             dataframe_list.append(boxscore_list[i].dataframe)
 
             dataframe_list[i] = dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
@@ -229,7 +229,7 @@ class Team():
         dataframe_column_list = list()
         dataframe_value_list = list()
         new_df_value_list = list()
-        
+
         for iterable, df in enumerate(dataframe_list):
             for column in df:
                 df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
@@ -237,11 +237,11 @@ class Team():
 
         for df in dataframe_list:
             dataframe_value_list.append(df.values)
-        
+
         for iterable, arr in enumerate(dataframe_value_list):
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
-        
+
         training_games_df = pd.DataFrame(columns=dataframe_column_list)
 
         training_games_df.loc[0] = new_df_value_list
@@ -258,7 +258,7 @@ class Team():
         self.training_games = training_games_df
 
         print('Seperated points scored from ' + self.name + "'s dataframe.")
-        
+
         # retreive training games pickle and add acquired dataframes to it
         loaded_games_df = pd.DataFrame()
         global game_df_bool
@@ -269,14 +269,14 @@ class Team():
                 loaded_games_df = pickle.load(games_pickle_file)
                 games_pickle_file.close()
                 game_df_bool = False
-                
+
             except:
                 games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
                 games_pickle_file.close()
                 game_df_bool = False
 
             loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
-            
+
             games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
             pickle.dump(loaded_games_df, games_pickle_file)
             games_pickle_file.close()
@@ -291,14 +291,14 @@ class Team():
                 loaded_points_df = pickle.load(points_pickle_file)
                 points_pickle_file.close()
                 points_df_bool = False
-                
+
             except:
                 points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
                 points_pickle_file.close()
                 points_df_bool = False
 
             loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
-            
+
             points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
             pickle.dump(loaded_points_df, points_pickle_file)
             points_pickle_file.close()
@@ -324,7 +324,7 @@ for year in str_year_list:
 
         else:
             team_abbrev[2] = 'BRK'
-        
+
         if int(year) <= 2014:
             team_abbrev[4] = 'CHA'
 
