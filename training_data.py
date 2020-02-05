@@ -358,4 +358,4 @@ for year in str_year_list:
             print(team.target_points)
 
         except:
-            print('Could not gather ' + team + "'s" + 'dataframes for ' + year)
+            print('Could not gather ' + team + "'s" + 'dataframes for ' + year)bfg
