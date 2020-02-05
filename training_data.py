@@ -242,15 +242,16 @@ class Team():
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
         
-        training_games_df = pd.DataFrame(columns=dataframe_column_list, index=[self.team + random_date], data=new_df_value_list)
+        training_games_df = pd.DataFrame(columns=dataframe_column_list)
 
-        #training_games_df.loc[self.team + random_date] = new_df_value_list
+        training_games_df.loc[0] = new_df_value_list
 
         # seperate the points scored (target data) into seperate dataframes
+        target_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
+        
         df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
-
-        target_points_df = pd.DataFrame(index=[self.team + random_date], data=df_column)
+        target_points_df = target_points_df.append(df_columns, ignore_index=True, sort=False)
         self.target_points = target_points_df
 
         # filter out the most recent (target) game from the training data
@@ -276,7 +277,7 @@ class Team():
                 game_df_bool = False
 
             loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
-            print(loaded_games_df)
+            
             games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
             pickle.dump(loaded_games_df, games_pickle_file)
             games_pickle_file.close()
@@ -298,7 +299,7 @@ class Team():
                 points_df_bool = False
 
             loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
-            print(loaded_points_df)
+            
             points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
             pickle.dump(loaded_points_df, points_pickle_file)
             points_pickle_file.close()
