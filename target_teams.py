@@ -43,7 +43,7 @@ def dateconverter(date):
 
     elif date[5:7] == '03':
         count = 152
-        
+
     elif date[5:7] == '04':
         count = 183
 
@@ -163,11 +163,11 @@ tenth_game_df = tenth_game.dataframe
 first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
-                                
+
 second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
-                                
+
 third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
                                 'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
                                 'date', 'location'])
