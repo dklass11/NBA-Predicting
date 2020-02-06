@@ -140,7 +140,7 @@ class Team():
         self.n_games = n_games + 1
         self.schedule = Schedule(self.name, year=self.year)
 
-        print('Acquired ' + self.name + "'s " + 'schdeule.')
+        print('Acquired ' + self.name + "'s " + 'schedule.')
 
         indexes = list()
         for game in self.schedule:
@@ -182,7 +182,7 @@ class Team():
         for index in indexes:
             index_counts.append(indexconverter(index))
 
-        # compare dates and find previous specified numnber of game dates
+        # compare dates and find previous specified number of game dates
         index_counter = 0
 
         for count in index_counts:
@@ -246,7 +246,7 @@ class Team():
 
         training_games_df.loc[0] = new_df_value_list
 
-        # seperate the points scored (target data) into seperate dataframes
+        # separate the points scored (target data) into separate dataframes
         target_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
         df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
