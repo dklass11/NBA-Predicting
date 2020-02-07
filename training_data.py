@@ -12,9 +12,11 @@ from keras.layers import Dense
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
+
 # initialize any needed variables
 game_df_bool = True
 points_df_bool = True
+
 
 # generate a random date to retreive games from
 def date_generator():
