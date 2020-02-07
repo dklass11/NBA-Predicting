@@ -79,7 +79,13 @@ def date_generator():
 
         random_date_list = list()
 
-    if random_date_team not in random_date_list:
+    date_count = 0
+
+    for date in random_date_list:
+        if random_date_team != date:
+            date_count += 1
+
+    if date_count == len(random_date_list):
         random_date_list.append(random_date_team)
 
     else:
@@ -307,7 +313,7 @@ class Team():
 
 # initial conditions to capture NBA data
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
-            'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
+                'LAL', 'MEM', 'MIA','MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
 current_year = '2020'
 
@@ -320,7 +326,8 @@ for year in range(2000, int(current_year)):
     str_year_list.append(str(year))
 
 for year in str_year_list:
-    for team in team_abbrev:
+    for team_name in team_abbrev:
+        # adjust team abbreviations to comply with sports reference database for specified year
         if int(year) <= 2012:
             team_abbrev[2] = 'NJN'
 
@@ -337,10 +344,10 @@ for year in str_year_list:
             team_abbrev[4] = 'CHO'
 
         if int(year) <= 2001:
-            team_abbrev[14] = 'VAN'
+            team_abbrev[0] = 'VAN'
 
         else:
-            team_abbrev[14] = 'MEM'
+            team_abbrev[0] = 'MEM'
 
         if int(year) <= 2013:
             team_abbrev[17] = 'NOH'
@@ -360,4 +367,4 @@ for year in str_year_list:
             print(team.target_points)
 
         except:
-            print('Could not gather ' + team + "'s" + 'dataframes for ' + year)
+            print('Could not gather ' + team_name + "'s" + ' dataframes for ' + year + '.')
