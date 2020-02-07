@@ -138,7 +138,7 @@ class Team():
         date_generator()
 
     # gather dataframes from previous specified number of games and year
-    def gatherdf(self, n_games):
+    def gather_df(self, n_games):
         self.n_games = n_games + 1
         self.schedule = Schedule(self.name, year=self.year)
 
@@ -356,7 +356,7 @@ for year in str_year_list:
 
         try:
             team = Team(team, year)
-            team.gatherdf(n_games)
+            team.gather_df(n_games)
             print(team.target_points)
 
         except:
