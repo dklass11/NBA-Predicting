@@ -68,6 +68,7 @@ def date_generator():
     random_date_team = team + random_date
 
     # retreive training date pickle and check if the same random date had been generated before
+    #move to end
     try:
         date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
@@ -368,3 +369,5 @@ for year in str_year_list:
 
         except:
             print('Could not gather ' + team_name + "'s" + ' dataframes for ' + year + '.')
+
+            (((((((((((((((())))))))))))))))
