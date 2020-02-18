@@ -18,8 +18,38 @@ boxscore_year = ''
 random_date = ''
 current_team_name = ''
 random_date_count = 0
-game_df_bool = True
-points_df_bool = True
+
+
+# retreive training date pickle file
+try:
+    date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
+    random_date_list = pickle.load(date_pickle_file)
+    date_pickle_file.close()
+
+except:
+    random_date_list = list()
+
+# retreive training games pickle file
+loaded_games_df = pd.DataFrame()
+
+try:
+    games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
+    loaded_games_df = pickle.load(games_pickle_file)
+    games_pickle_file.close()
+
+except:
+    pass
+
+# retreive training points pickle file
+loaded_points_df = pd.DataFrame()
+
+try:
+    points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
+    loaded_points_df = pickle.load(points_pickle_file)
+    points_pickle_file.close()
+
+except:
+    pass
 
 
 # generate a random date to retreive games from
@@ -71,19 +101,7 @@ def date_generator():
     random_date = boxscore_year + '-' + month + '-' + day
     random_date_team = current_team_name + random_date
 
-    # retreive training date pickle and check if the same random date had been generated before
-    '''move to end'''
-    try:
-        date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
-        random_date_list = pickle.load(date_pickle_file)
-        date_pickle_file.close()
-
-    except:
-        date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
-        date_pickle_file.close()
-
-        random_date_list = list()
-
+    # check if the same random date had been generated before
     date_count = 0
 
     for date in random_date_list:
@@ -95,10 +113,6 @@ def date_generator():
 
     else:
         date_generator()
-
-    date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
-    pickle.dump(random_date_list, date_pickle_file)
-    date_pickle_file.close()
 
     # convert random date to count
     def dateconverter(date):
@@ -272,49 +286,12 @@ class Team():
 
         print('Seperated points scored from ' + self.name + "'s dataframe.")
 
-        # retreive training games pickle and add acquired dataframes to it
-        loaded_games_df = pd.DataFrame()
-        global game_df_bool
+        # add acquired games and pickle dataframes to pickle dataframes
+        global loaded_games_df
+        loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
+        global loaded_points_df
+        loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
 
-        if game_df_bool == True:
-            try:
-                games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
-                loaded_games_df = pickle.load(games_pickle_file)
-                games_pickle_file.close()
-                game_df_bool = False
-
-            except:
-                games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
-                games_pickle_file.close()
-                game_df_bool = False
-
-            loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
-
-            games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
-            pickle.dump(loaded_games_df, games_pickle_file)
-            games_pickle_file.close()
-
-        # do the same for target points
-        loaded_points_df = pd.DataFrame()
-        global points_df_bool
-
-        if points_df_bool == True:
-            try:
-                points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
-                loaded_points_df = pickle.load(points_pickle_file)
-                points_pickle_file.close()
-                points_df_bool = False
-
-            except:
-                points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
-                points_pickle_file.close()
-                points_df_bool = False
-
-            loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
-
-            points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
-            pickle.dump(loaded_points_df, points_pickle_file)
-            points_pickle_file.close()
 
 # initial conditions to capture NBA data
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
@@ -323,6 +300,7 @@ team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET
 current_year = '2020'
 
 n_games = 10
+
 
 # gather multiple dataframes for different teams in same year
 str_year_list = list()
@@ -366,7 +344,23 @@ for year in str_year_list:
         else:
             team_abbrev[19] = 'OKC'
 
-        current_team = Team(team_abbr, year)
         current_team_name = current_team.name
+        current_team = Team(team_abbr, year)
         current_team.gather_df(n_games)
         print(current_team.target_points)
+
+
+# add generated dates to pickle file
+date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
+pickle.dump(random_date_list, date_pickle_file)
+date_pickle_file.close()
+
+# add acquired games dataframe to pickle file
+games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
+pickle.dump(loaded_games_df, games_pickle_file)
+games_pickle_file.close()
+
+# dd acquired points dataframe to pickle file
+points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
+pickle.dump(loaded_points_df, points_pickle_file)
+points_pickle_file.close()
