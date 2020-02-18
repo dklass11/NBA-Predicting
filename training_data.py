@@ -14,6 +14,10 @@ from sportsreference.nba.schedule import Schedule
 
 
 # initialize any needed variables
+boxscore_year = ''
+random_date = ''
+current_team_name = ''
+random_date_count = 0
 game_df_bool = True
 points_df_bool = True
 
@@ -65,10 +69,10 @@ def date_generator():
     # assign the random date from previous findings
     global random_date
     random_date = boxscore_year + '-' + month + '-' + day
-    random_date_team = team + random_date
+    random_date_team = current_team_name + random_date
 
     # retreive training date pickle and check if the same random date had been generated before
-    #move to end
+    '''move to end'''
     try:
         date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
         random_date_list = pickle.load(date_pickle_file)
@@ -327,7 +331,7 @@ for year in range(2000, int(current_year)):
     str_year_list.append(str(year))
 
 for year in str_year_list:
-    for team_name in team_abbrev:
+    for team_abbr in team_abbrev:
         # adjust team abbreviations to comply with sports reference database for specified year
         if int(year) <= 2012:
             team_abbrev[2] = 'NJN'
@@ -362,10 +366,7 @@ for year in str_year_list:
         else:
             team_abbrev[19] = 'OKC'
 
-        try:
-            team = Team(team, year)
-            team.gather_df(n_games)
-            print(team.target_points)
-
-        except:
-            print('Could not gather ' + team_name + "'s" + ' dataframes for ' + year + '.')
+        current_team = Team(team_abbr, year)
+        current_team_name = current_team.name
+        current_team.gather_df(n_games)
+        print(current_team.target_points)
