@@ -369,5 +369,3 @@ for year in str_year_list:
 
         except:
             print('Could not gather ' + team_name + "'s" + ' dataframes for ' + year + '.')
-
-            (((((((((((((((())))))))))))))))
