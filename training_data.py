@@ -91,10 +91,10 @@ def date_generator():
 
     if month == '12':
         global boxscore_year
-        boxscore_year = str(int(year) - 1)
+        boxscore_year = str(year - 1)
 
     else:
-        boxscore_year = year
+        boxscore_year = str(year)
 
     # assign the random date from previous findings
     global random_date
@@ -160,15 +160,15 @@ class Team():
         self.name = team
         self.year = year
 
-        date_generator()
-
     # gather dataframes from previous specified number of games and year
     def gather_df(self, n_games):
         self.n_games = n_games + 1
         self.schedule = Schedule(self.name, year=self.year)
 
-        print('Acquired ' + self.name + "'s " + 'schedule.')
+        date_generator()
 
+        print('Acquired ' + self.name + "'s " + 'schedule.')
+        '''
         indexes = list()
         for game in self.schedule:
             indexes.append(game.boxscore_index)
@@ -290,64 +290,61 @@ class Team():
         global loaded_games_df
         loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
         global loaded_points_df
-        loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
+        loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)'''
 
 
 # initial conditions to capture NBA data
 team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
                 'LAL', 'MEM', 'MIA','MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
 
-current_year = '2020'
+current_year = 2020 # as in the 2019-2020 season
+
+starting_year = 2000
 
 n_games = 10
 
 
 # gather multiple dataframes for different teams in same year
-str_year_list = list()
-
-for year in range(2000, int(current_year)):
-    str_year_list.append(str(year))
-
-for year in str_year_list:
+for year in range(starting_year, (current_year + 1)):
     for team_abbr in team_abbrev:
         # adjust team abbreviations to comply with sports reference database for specified year
-        if int(year) <= 2012:
+        if year <= 2012:
             team_abbrev[2] = 'NJN'
 
         else:
             team_abbrev[2] = 'BRK'
 
-        if int(year) <= 2014:
+        if year <= 2014:
             team_abbrev[4] = 'CHA'
 
-        if int(year) <= 2002:
+        if year <= 2002:
             team_abbrev[4] = 'CHH'
 
         else:
             team_abbrev[4] = 'CHO'
 
-        if int(year) <= 2001:
-            team_abbrev[0] = 'VAN'
+        if year <= 2001:
+            team_abbrev[14] = 'VAN'
 
         else:
-            team_abbrev[0] = 'MEM'
+            team_abbrev[14] = 'MEM'
 
-        if int(year) <= 2013:
+        if year <= 2013:
             team_abbrev[17] = 'NOH'
 
         else:
             team_abbrev[17] = 'NOP'
 
-        if int(year) <= 2008:
+        if year <= 2008:
             team_abbrev[19] = 'SEA'
 
         else:
             team_abbrev[19] = 'OKC'
 
+        current_team = Team(team_abbr, str(year))
         current_team_name = current_team.name
-        current_team = Team(team_abbr, year)
         current_team.gather_df(n_games)
-        print(current_team.target_points)
+        #print(current_team.target_points)
 
 
 # add generated dates to pickle file
