@@ -294,12 +294,12 @@ class Team():
 
 
 # initial conditions to capture NBA data
-team_abbrev = list(['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
-                'LAL', 'MEM', 'MIA','MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'])
+team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
+            'LAL', 'MEM', 'MIA','MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
 current_year = 2020 # as in the 2019-2020 season
 
-starting_year = 2000
+starting_year = 2003
 
 n_games = 10
 
@@ -314,14 +314,21 @@ for year in range(starting_year, (current_year + 1)):
         else:
             team_abbrev[2] = 'BRK'
 
-        if year <= 2014:
-            team_abbrev[4] = 'CHA'
-
         if year <= 2002:
             team_abbrev[4] = 'CHH'
 
         else:
             team_abbrev[4] = 'CHO'
+
+        if year <= 2014:
+            team_abbrev[4] = 'CHA'
+
+        else:
+            team_abbrev[4] = 'CHO'
+
+
+        if team_abbr == 'CHA' and (2003 <= year <= 2004):
+            continue
 
         if year <= 2001:
             team_abbrev[14] = 'VAN'
@@ -335,6 +342,12 @@ for year in range(starting_year, (current_year + 1)):
         else:
             team_abbrev[17] = 'NOP'
 
+        if team_abbr == 'NOH' and year <= 2002:
+            continue
+
+        if 2016 <= year <= 2017:
+            team_abbrev[17] = 'NOK'
+
         if year <= 2008:
             team_abbrev[19] = 'SEA'
 
@@ -345,6 +358,8 @@ for year in range(starting_year, (current_year + 1)):
         current_team_name = current_team.name
         current_team.gather_df(n_games)
         #print(current_team.target_points)
+
+    print('----------')
 
 
 # add generated dates to pickle file
