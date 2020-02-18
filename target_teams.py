@@ -16,7 +16,7 @@ target1_team = 'PHI'
 target1_team_schedule = Schedule(target1_team)
 target1_team_indexes = list()
 
-print('Acquired team 1 schdeule.')
+print('Acquired team 1 schedule.')
 
 for game in target1_team_schedule:
     target1_team_indexes.append(game.boxscore_index)
@@ -226,7 +226,7 @@ target2_team = 'BOS'
 target2_team_schedule = Schedule(target2_team)
 target2_team_indexes = list()
 
-print('Acquired team 2 schdeule.')
+print('Acquired team 2 schedule.')
 
 for game in target2_team_schedule:
     target2_team_indexes.append(game.boxscore_index)
