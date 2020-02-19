@@ -294,12 +294,12 @@ class Team():
 
 
 # initial conditions to capture NBA data
-team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC',
-            'LAL', 'MEM', 'MIA', 'MIN', 'NOP', 'NYK', 'OKC', 'PHI', 'PHO', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
+team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM',
+               'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
 current_year = 2020 # as in the 2019-2020 season
 
-starting_year = 2000
+starting_year = 1980
 
 n_games = 10
 
@@ -326,6 +326,14 @@ for year in range(starting_year, (current_year + 1)):
         if year <= 2002:
             team_abbrev[4] = 'CHH'
 
+        if team_abbr == 'CHH' and year <= 1988:
+            continue
+
+        if team_abbr == 'DAL' and year <= 1980:
+            continue
+
+        if year <= 1984:
+            team_abbrev[12] = 'SDC'
 
         if year <= 2001:
             team_abbrev[14] = 'VAN'
@@ -333,23 +341,50 @@ for year in range(starting_year, (current_year + 1)):
         else:
             team_abbrev[14] = 'MEM'
 
+        if team_abbr == 'VAN' and year <= 1995:
+            continue
+
+        if team_abbr == 'MIA' and year <= 1998:
+            continue
+
+        if team_abbr == 'MIN' and year <= 1989:
+            continue
+
         if year <= 2013:
-            team_abbrev[17] = 'NOH'
+            team_abbrev[18] = 'NOH'
 
         else:
-            team_abbrev[17] = 'NOP'
+            team_abbrev[18] = 'NOP'
 
         if 2006 <= year <= 2007:
-            team_abbrev[17] = 'NOK'
+            team_abbrev[18] = 'NOK'
 
         if team_abbr == 'NOH' and year <= 2002:
             continue
 
         if year <= 2008:
-            team_abbrev[19] = 'SEA'
+            team_abbrev[20] = 'SEA'
 
         else:
-            team_abbrev[19] = 'OKC'
+            team_abbrev[20] = 'OKC'
+
+        if team_abbr == 'ORL' and year <= 1989:
+            continue
+
+        if year <= 1985:
+            team_abbrev[25] = 'KCK'
+
+        else:
+            team_abbrev[25] = 'SAC'
+
+        if team_abbr == 'TOR' and year <= 1995:
+            continue
+
+        if year <= 1997:
+            team_abbrev[29] = 'WSB'
+
+        else:
+            team_abbrev[29] = 'WAS'
 
         current_team = Team(team_abbr, str(year))
         current_team_name = current_team.name
@@ -373,3 +408,6 @@ games_pickle_file.close()
 points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
 pickle.dump(loaded_points_df, points_pickle_file)
 points_pickle_file.close()
+
+
+print('Gathered all specified dataframes.')
