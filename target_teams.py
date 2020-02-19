@@ -199,27 +199,22 @@ for target_team in target_team_abbreviations:
     current_team.gather_df(n_games)
 
 
+# neural network
+model = Sequential()
 
+model.add(Dense(74, activation='relu', input_dim=73))
+model.add(Dense(200, activation='relu'))
+model.add(Dense(200, activation='relu'))
+model.add(Dense(200, activation='relu'))
+model.add(Dense(200, activation='relu'))
+model.add(Dense(200, activation='relu'))
+model.add(Dense(2))
 
+model.compile(optimizer='adam', loss='mean_squared_error')
 
+model = model.fit(target1_ten_games_df, target1_ten_games_points_df, validation_split=0.1, epochs=1000, shuffle=True)
 
-
-'''
-model_target1 = Sequential()
-
-model_target1.add(Dense(74, activation='relu', input_dim=73))
-model_target1.add(Dense(200, activation='relu'))
-model_target1.add(Dense(200, activation='relu'))
-model_target1.add(Dense(200, activation='relu'))
-model_target1.add(Dense(200, activation='relu'))
-model_target1.add(Dense(200, activation='relu'))
-model_target1.add(Dense(2))
-
-model_target1.compile(optimizer='adam', loss='mean_squared_error')
-
-model = model_target1.fit(target1_ten_games_df, target1_ten_games_points_df, validation_split=0.1, epochs=1000, shuffle=True)
-
-predictedwins = model_target1.predict(target2_ten_games_df)
+predictedwins = model.predict(target2_ten_games_df)
 
 print(predictedwins)
 '''
