@@ -333,14 +333,14 @@ for year in range(starting_year, (current_year + 1)):
         else:
             team_abbrev[14] = 'MEM'
 
-        if 2016 <= year <= 2017:
-            team_abbrev[17] = 'NOK'
+        if year <= 2013:
+            team_abbrev[17] = 'NOH'
 
         else:
             team_abbrev[17] = 'NOP'
 
-        if year <= 2013:
-            team_abbrev[17] = 'NOH'
+        if 2006 <= year <= 2007:
+            team_abbrev[17] = 'NOK'
 
         if team_abbr == 'NOH' and year <= 2002:
             continue
