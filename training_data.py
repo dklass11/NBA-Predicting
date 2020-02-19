@@ -153,8 +153,6 @@ def date_generator():
     global random_date_count
     random_date_count = dateconverter(random_date)
 
-    print('Generated new random date: ' + random_date)
-
 
 class Team():
 
@@ -170,8 +168,6 @@ class Team():
         self.schedule = Schedule(self.name, year=self.year)
 
         date_generator()
-
-        print('Acquired ' + self.name + "'s " + 'schedule.')
 
         indexes = list()
         for game in self.schedule:
@@ -241,8 +237,6 @@ class Team():
         for position in multiple_positions:
             multiple_indexes.append(indexes[position])
 
-        print('Found last ' + str(self.n_games - 1) + ' boxscore indexes of ' + self.name + '.')
-
         # use boxscore indexes to retreive each game's dataframe
         boxscore_list = list()
         dataframe_list = list()
@@ -288,20 +282,20 @@ class Team():
         training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
         self.training_games = training_games_df
 
-        print('Seperated points scored from ' + self.name + "'s dataframe.")
-
         # add acquired games and pickle dataframes to pickle dataframes
         global loaded_games_df
         loaded_games_df = loaded_games_df.append(training_games_df, ignore_index=True, sort=False)
         global loaded_points_df
         loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
 
+        print('Acquired last ' + str(self.n_games - 1) + ' game statistics of ' + self.name + ' in ' + str(year) + '.')
+
 
 # initial conditions to capture NBA data
 team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM',
                'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
-current_year = 2020 # as in the 2019-2020 season
+current_year = 1985 # as in the 2019-2020 season
 
 starting_year = 1985 # works for 1985 and later years (reference website doesn't support all stat categories before then)
 
@@ -389,7 +383,6 @@ for number_of_passes in range(1):
             current_team = Team(team_abbr, str(year))
             current_team_name = current_team.name
             current_team.gather_df(n_games)
-            print(current_team.target_points)
 
         print('----------')
 
