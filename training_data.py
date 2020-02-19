@@ -1,4 +1,4 @@
-# import math modules
+# import math and data storing modules
 import numpy as np
 import pandas as pd
 import random as rand
@@ -309,88 +309,89 @@ n_games = 10
 
 
 # gather multiple dataframes for different teams in same year
-for year in range(starting_year, (current_year + 1)):
-    for team_abbr in team_abbrev:
-        # adjust team abbreviations to comply with sports reference database for specified year
-        if year <= 2012:
-            team_abbrev[2] = 'NJN'
+for number_of_passes in range(1):
+    for year in range(starting_year, (current_year + 1)):
+        for team_abbr in team_abbrev:
+            # adjust team abbreviations to comply with sports reference database for specified year
+            if year <= 2012:
+                team_abbrev[2] = 'NJN'
 
-        else:
-            team_abbrev[2] = 'BRK'
+            else:
+                team_abbrev[2] = 'BRK'
 
-        if year <= 2014:
-            team_abbrev[4] = 'CHA'
+            if year <= 2014:
+                team_abbrev[4] = 'CHA'
 
-        else:
-            team_abbrev[4] = 'CHO'
+            else:
+                team_abbrev[4] = 'CHO'
 
-        if team_abbr == 'CHA' and 2003 <= year <= 2004:
-            continue
+            if team_abbr == 'CHA' and 2003 <= year <= 2004:
+                continue
 
-        if year <= 2002:
-            team_abbrev[4] = 'CHH'
+            if year <= 2002:
+                team_abbrev[4] = 'CHH'
 
-        if team_abbr == 'CHH' and year <= 1988:
-            continue
+            if team_abbr == 'CHH' and year <= 1988:
+                continue
 
-        if year <= 2001:
-            team_abbrev[14] = 'VAN'
+            if year <= 2001:
+                team_abbrev[14] = 'VAN'
 
-        else:
-            team_abbrev[14] = 'MEM'
+            else:
+                team_abbrev[14] = 'MEM'
 
-        if team_abbr == 'VAN' and year <= 1995:
-            continue
+            if team_abbr == 'VAN' and year <= 1995:
+                continue
 
-        if team_abbr == 'MIA' and year <= 1998:
-            continue
+            if team_abbr == 'MIA' and year <= 1998:
+                continue
 
-        if team_abbr == 'MIN' and year <= 1989:
-            continue
+            if team_abbr == 'MIN' and year <= 1989:
+                continue
 
-        if year <= 2013:
-            team_abbrev[18] = 'NOH'
+            if year <= 2013:
+                team_abbrev[18] = 'NOH'
 
-        else:
-            team_abbrev[18] = 'NOP'
+            else:
+                team_abbrev[18] = 'NOP'
 
-        if 2006 <= year <= 2007:
-            team_abbrev[18] = 'NOK'
+            if 2006 <= year <= 2007:
+                team_abbrev[18] = 'NOK'
 
-        if team_abbr == 'NOH' and year <= 2002:
-            continue
+            if team_abbr == 'NOH' and year <= 2002:
+                continue
 
-        if year <= 2008:
-            team_abbrev[20] = 'SEA'
+            if year <= 2008:
+                team_abbrev[20] = 'SEA'
 
-        else:
-            team_abbrev[20] = 'OKC'
+            else:
+                team_abbrev[20] = 'OKC'
 
-        if team_abbr == 'ORL' and year <= 1989:
-            continue
+            if team_abbr == 'ORL' and year <= 1989:
+                continue
 
-        if year <= 1985:
-            team_abbrev[25] = 'KCK'
+            if year <= 1985:
+                team_abbrev[25] = 'KCK'
 
-        else:
-            team_abbrev[25] = 'SAC'
+            else:
+                team_abbrev[25] = 'SAC'
 
-        if team_abbr == 'TOR' and year <= 1995:
-            continue
+            if team_abbr == 'TOR' and year <= 1995:
+                continue
 
-        if year <= 1997:
-            team_abbrev[29] = 'WSB'
+            if year <= 1997:
+                team_abbrev[29] = 'WSB'
 
-        else:
-            team_abbrev[29] = 'WAS'
+            else:
+                team_abbrev[29] = 'WAS'
 
-        # create a team class for every team and gather dataframes
-        current_team = Team(team_abbr, str(year))
-        current_team_name = current_team.name
-        current_team.gather_df(n_games)
-        print(current_team.target_points)
+            # create a team class for every team and gather dataframes
+            current_team = Team(team_abbr, str(year))
+            current_team_name = current_team.name
+            current_team.gather_df(n_games)
+            print(current_team.target_points)
 
-    print('----------')
+        print('----------')
 
 
 # add generated dates to pickle file
