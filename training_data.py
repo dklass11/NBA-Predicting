@@ -28,6 +28,7 @@ try:
 
 except:
     random_date_list = list()
+    pass
 
 # retreive training games pickle file
 loaded_games_df = pd.DataFrame()
@@ -54,65 +55,68 @@ except:
 
 # generate a random date to retreive games from
 def date_generator():
-    # generate a random month
-    chance = rand.randint(1, 4)
+    def date_creation():
+        # generate a random month
+        chance = rand.randint(1, 4)
 
-    if chance <= 3:
-        month = '0' + str(rand.randint(1, 3))
+        if chance <= 3:
+            month = '0' + str(rand.randint(1, 3))
 
-    elif chance == 4:
-        month = '12'
+        elif chance == 4:
+            month = '12'
 
-    # generate a random day based on month
-    if month == '01' or month == '03' or month == '12':
-        day = rand.randint(1, 31)
+        # generate a random day based on month
+        if month == '01' or month == '03' or month == '12':
+            day = rand.randint(1, 31)
 
-        if day in range(1, 10):
-            day = '0' + str(day)
+            if day in range(1, 10):
+                day = '0' + str(day)
+
+            else:
+                day = str(day)
+
+        elif month == '02':
+            day = rand.randint(1, 28)
+
+            if day in range(1, 10):
+                day = '0' + str(day)
+            else:
+                day = str(day)
 
         else:
-            day = str(day)
+            day = rand.randint(1, 30)
 
-    elif month == '02':
-        day = rand.randint(1, 28)
+            if day in range(1, 10):
+                day = '0' + str(day)
+            else:
+                day = str(day)
 
-        if day in range(1, 10):
-            day = '0' + str(day)
+        if month == '12':
+            global boxscore_year
+            boxscore_year = str(year - 1)
+
         else:
-            day = str(day)
+            boxscore_year = str(year)
 
-    else:
-        day = rand.randint(1, 30)
+        # assign the random date from previous findings
+        global random_date
+        random_date = boxscore_year + '-' + month + '-' + day
+        random_date_team = current_team_name + random_date
 
-        if day in range(1, 10):
-            day = '0' + str(day)
+        # check if the same random date had been generated before
+        date_bool = False
+
+        for date in random_date_list:
+            if random_date_team == date:
+                date_bool = True
+
+        if date_bool == False:
+            random_date_list.append(random_date_team)
+
         else:
-            day = str(day)
+            date_creation()
 
-    if month == '12':
-        global boxscore_year
-        boxscore_year = str(year - 1)
-
-    else:
-        boxscore_year = str(year)
-
-    # assign the random date from previous findings
-    global random_date
-    random_date = boxscore_year + '-' + month + '-' + day
-    random_date_team = current_team_name + random_date
-
-    # check if the same random date had been generated before
-    date_bool = False
-
-    for date in random_date_list:
-        if random_date_team != date:
-            date_bool = True
-
-    if date_bool == True:
-        random_date_list.append(random_date_team)
-
-    else:
-        date_generator()
+    date_creation()
 
     # convert random date to count
     def dateconverter(date):
