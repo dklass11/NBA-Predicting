@@ -18,13 +18,23 @@ from sportsreference.nba.schedule import Schedule
 boxscore_year = ''
 current_team_name = ''
 current_date_count = 0
+target_games_df = pd.DataFrame()
 
+# load in training pickle files
+games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
+training_games_df = pickle.load(games_pickle_file)
+games_pickle_file.close()
+
+points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
+training_points_df = pickle.load(points_pickle_file)
+points_pickle_file.close()
+
+# get current year
 if str(date.today())[5:7] == '11' or str(date.today())[5:7] == '12':
     current_year = str(int(str(date.today())[:4] + 1))
 
 else:
     current_year = str(date.today())[:4]
-
 
 # convert current date to count to be used to compare against game schedule
 def dateconverter(date):
@@ -167,20 +177,13 @@ class Team():
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
 
-        training_games_df = pd.DataFrame(columns=dataframe_column_list)
+        target_games_df = pd.DataFrame(columns=dataframe_column_list)
 
-        training_games_df.loc[0] = new_df_value_list
-
-        # separate the points scored (target data) into separate dataframes
-        target_points_df = pd.DataFrame()
-        df_columns = pd.DataFrame()
-        df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
-        target_points_df = target_points_df.append(df_columns, ignore_index=True, sort=False)
-        self.target_points = target_points_df
+        target_games_df.loc[0] = new_df_value_list
 
         # filter out the most recent (target) game from the training data
-        training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
-        self.training_games = training_games_df
+        target_games_df = target_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
+        self.target_games = target_games_df
 
         print('Acquired last ' + str(self.n_games - 1) + ' game statistics of ' + self.name + ' in ' + str(current_year) + '.')
 
@@ -193,28 +196,26 @@ n_games = 10
 
 # gather dataframes for target teams
 for target_team in target_team_abbreviations:
-    # create a team class for every team and gather dataframes
     current_team = Team(target_team, str(current_year))
     current_team_name = current_team.name
     current_team.gather_df(n_games)
 
 
-# neural network
+# setup and run neural network
 model = Sequential()
 
-model.add(Dense(74, activation='relu', input_dim=73))
-model.add(Dense(200, activation='relu'))
-model.add(Dense(200, activation='relu'))
-model.add(Dense(200, activation='relu'))
-model.add(Dense(200, activation='relu'))
-model.add(Dense(200, activation='relu'))
+model.add(Dense(731, activation='relu', input_dim=730))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
 model.add(Dense(2))
 
 model.compile(optimizer='adam', loss='mean_squared_error')
 
-model = model.fit(target1_ten_games_df, target1_ten_games_points_df, validation_split=0.1, epochs=1000, shuffle=True)
+model.fit(training_games_df, training_points_df, validation_split=0.1, epochs=1000, shuffle=True)
 
-predictedwins = model.predict(target2_ten_games_df)
+predicted_points = model.predict(target_games_df)
 
-print(predictedwins)
-'''
+print(predicted_points)
