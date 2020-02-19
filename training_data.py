@@ -102,13 +102,13 @@ def date_generator():
     random_date_team = current_team_name + random_date
 
     # check if the same random date had been generated before
-    date_count = 0
+    date_bool = False
 
     for date in random_date_list:
         if random_date_team != date:
-            date_count += 1
+            date_bool = True
 
-    if date_count == len(random_date_list):
+    if date_bool == True:
         random_date_list.append(random_date_team)
 
     else:
@@ -380,6 +380,7 @@ for year in range(starting_year, (current_year + 1)):
         else:
             team_abbrev[29] = 'WAS'
 
+        # create a team class for every team and gather dataframes
         current_team = Team(team_abbr, str(year))
         current_team_name = current_team.name
         current_team.gather_df(n_games)
