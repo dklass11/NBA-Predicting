@@ -1,27 +1,32 @@
-# import array and datframe modules
+# import math and data storing modules
 import numpy as np
 import pandas as pd
+import random as rand
+import pickle
+from datetime import date
 
 # import neural network model
 from keras.models import Sequential
 from keras.layers import Dense
 
-# import nba data fetching module
-import datetime
+# import NBA data fetching module
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
-# get target1 team's full schedule and boxscore indexes
-target1_team = 'PHI'
-target1_team_schedule = Schedule(target1_team)
-target1_team_indexes = list()
 
-print('Acquired team 1 schedule.')
+# initialize any needed variables
+boxscore_year = ''
+current_team_name = ''
+current_date_count = 0
 
-for game in target1_team_schedule:
-    target1_team_indexes.append(game.boxscore_index)
+if str(date.today())[5:7] == '11' or str(date.today())[5:7] == '12':
+    current_year = str(int(str(date.today())[:4] + 1))
 
-# convert current date to count
+else:
+    current_year = str(date.today())[:4]
+
+
+# convert current date to count to be used to compare against game schedule
 def dateconverter(date):
     count = 0
 
@@ -48,325 +53,158 @@ def dateconverter(date):
         count = 183
 
     # add number of days to count
-    count += int(date[8:10])
+    count += int(date[8:])
 
     return count
 
-# run current date through converter
-current_date_count = dateconverter(str(datetime.date.today()))
 
-print('Converted current date.')
+class Team():
 
-def indexconverter(index):
-    count = 0
-
-    # convert month to number of days
-    if index[4:6] == '10':
-        count = 0
-
-    elif index[4:6] == '11':
-        count = 31
-
-    elif index[4:6] == '12':
-        count = 61
-
-    elif index[4:6] == '01':
-        count = 92
+    '''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. '''
 
-    elif index[4:6] == '02':
-        count = 123
-
-    elif index[4:6] == '03':
-        count = 152
-
-    elif index[4:6] == '04':
-        count = 183
-
-    # add number of days to count
-    count += int(index[6:8])
+    def __init__(self, team, year):
+        self.name = team
+        self.year = year
 
-    return count
-
-# run indexes through converter
-target1_team_index_counts = list()
-
-for i in target1_team_indexes:
-    target1_team_index_counts.append(indexconverter(i))
+    # gather dataframes from previous specified number of games and year
+    def gather_df(self, n_games):
+        self.n_games = n_games + 1
+        self.schedule = Schedule(self.name, year=self.year)
 
-# compare dates and find previous ten game dates
-target1_index_counter = 0
-
-for count in target1_team_index_counts:
-    if target1_index_counter == 0:
-        if current_date_count <= count:
-            position = target1_team_index_counts.index(count)
+        global current_date_count
+        current_date_count = dateconverter(str(date.today()))
 
-            # use index counts to find positions of Boxscore indexes
-            target1_team_ten_index_counts = target1_team_index_counts[::-1]
-            target1_team_ten_index_counts = target1_team_ten_index_counts[(82-position):((82-position)+10)]
+        indexes = list()
+        for game in self.schedule:
+            indexes.append(game.boxscore_index)
 
-            target1_index_counter = 1
-
-# use index counts to find positions of Boxscore indexes
-target1_team_ten_pos = list()
-target1_team_ten_indexes = list()
-
-for index_count in target1_team_ten_index_counts:
-    target1_team_ten_pos.append(target1_team_index_counts.index(index_count))
-
-for position in target1_team_ten_pos:
-    target1_team_ten_indexes.append(target1_team_indexes[position])
-
-print('Found boxscore indexes of team 1.')
-
-# store each Boxscore
-first_game = Boxscore(target1_team_ten_indexes[0])
-second_game = Boxscore(target1_team_ten_indexes[1])
-third_game = Boxscore(target1_team_ten_indexes[2])
-fourth_game = Boxscore(target1_team_ten_indexes[3])
-fifth_game = Boxscore(target1_team_ten_indexes[4])
-sixth_game = Boxscore(target1_team_ten_indexes[5])
-seventh_game = Boxscore(target1_team_ten_indexes[6])
-eighth_game = Boxscore(target1_team_ten_indexes[7])
-ninth_game = Boxscore(target1_team_ten_indexes[8])
-tenth_game = Boxscore(target1_team_ten_indexes[9])
+        def indexconverter(index):
+            count = 0
 
-# create boolean list to show if target1 team is home
-home_list = list([False, False, False, False, False, False, False, False, False, False])
+            # convert month to number of days
+            if index[4:6] == '10':
+                count = 0
 
-for index in target1_team_ten_indexes:
-    if target1_team in index:
-        home_list[target1_team_ten_indexes.index(index)] = True
+            elif index[4:6] == '11':
+                count = 31
 
-first_game_df = pd.DataFrame()
-second_game_df = pd.DataFrame()
-third_game_df = pd.DataFrame()
-fourth_game_df = pd.DataFrame()
-fifth_game_df = pd.DataFrame()
-sixth_game_df = pd.DataFrame()
-seventh_game_df = pd.DataFrame()
-eighth_game_df = pd.DataFrame()
-ninth_game_df = pd.DataFrame()
-tenth_game_df = pd.DataFrame()
+            elif index[4:6] == '12':
+                count = 61
 
-first_game_df = first_game.dataframe
-second_game_df = second_game.dataframe
-third_game_df = third_game.dataframe
-fourth_game_df = fourth_game.dataframe
-fifth_game_df = fifth_game.dataframe
-sixth_game_df = sixth_game.dataframe
-seventh_game_df = seventh_game.dataframe
-eighth_game_df = eighth_game.dataframe
-ninth_game_df = ninth_game.dataframe
-tenth_game_df = tenth_game.dataframe
+            elif index[4:6] == '01':
+                count = 92
 
-first_game_df = first_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+            elif index[4:6] == '02':
+                count = 123
 
-second_game_df = second_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+            elif index[4:6] == '03':
+                count = 152
 
-third_game_df = third_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+            elif index[4:6] == '04':
+                count = 183
 
-fourth_game_df = fourth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+            # add number of days to count
+            count += int(index[6:8])
 
-fifth_game_df = fifth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+            return count
 
-sixth_game_df = sixth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+        # run indexes through converter
+        index_counts = list()
 
-seventh_game_df = seventh_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
+        for index in indexes:
+            index_counts.append(indexconverter(index))
 
-eighth_game_df = eighth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-ninth_game_df = ninth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-tenth_game_df = tenth_game_df.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-
-target1_ten_games_df = first_game_df
-target1_ten_games_df = target1_ten_games_df.append(second_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(third_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(fourth_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(fifth_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(sixth_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(seventh_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(eighth_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(ninth_game_df, ignore_index=True)
-target1_ten_games_df = target1_ten_games_df.append(tenth_game_df, ignore_index=True)
-
-for_game_list = list([first_game, second_game, third_game, fourth_game, fifth_game, sixth_game, seventh_game, eighth_game, ninth_game, tenth_game])
-target1_ten_games_points_df = pd.DataFrame()
-
-for game in for_game_list:
-    target1_ten_games_points_df = target1_ten_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
-
-print('Gathered past 10 game stats and seperated points of team 1.')
-
-
-# rerun the same code for target2
-target2_team = 'BOS'
-target2_team_schedule = Schedule(target2_team)
-target2_team_indexes = list()
-
-print('Acquired team 2 schedule.')
-
-for game in target2_team_schedule:
-    target2_team_indexes.append(game.boxscore_index)
-
-# run indexes through converter
-target2_team_index_counts = list()
-
-for i in target2_team_indexes:
-    target2_team_index_counts.append(indexconverter(i))
-
-# compare dates and find previous ten game dates
-target2_index_counter = 0
-
-for count in target2_team_index_counts:
-    if target2_index_counter == 0:
-        if current_date_count <= count:
-            position = target2_team_index_counts.index(count)
-
-            # use index counts to find positions of Boxscore indexes
-            target2_team_ten_index_counts = target2_team_index_counts[::-1]
-            target2_team_ten_index_counts = target2_team_ten_index_counts[(82-position):((82-position)+10)]
-
-            target2_index_counter = 1
-
-# use index counts to find positions of Boxscore indexes
-target2_team_ten_pos = list()
-target2_team_ten_indexes = list()
-
-for index_count in target2_team_ten_index_counts:
-    target2_team_ten_pos.append(target2_team_index_counts.index(index_count))
-
-for position in target2_team_ten_pos:
-    target2_team_ten_indexes.append(target2_team_indexes[position])
-
-print('Found boxscore indexes of team 2.')
-
-# store each Boxscore
-first_game_2 = Boxscore(target2_team_ten_indexes[0])
-second_game_2 = Boxscore(target2_team_ten_indexes[1])
-third_game_2 = Boxscore(target2_team_ten_indexes[2])
-fourth_game_2 = Boxscore(target2_team_ten_indexes[3])
-fifth_game_2 = Boxscore(target2_team_ten_indexes[4])
-sixth_game_2 = Boxscore(target2_team_ten_indexes[5])
-seventh_game_2 = Boxscore(target2_team_ten_indexes[6])
-eighth_game_2 = Boxscore(target2_team_ten_indexes[7])
-ninth_game_2 = Boxscore(target2_team_ten_indexes[8])
-tenth_game_2 = Boxscore(target2_team_ten_indexes[9])
-
-
-# create boolean list to show if target2 team is home
-home_list_2 = list([False, False, False, False, False, False, False, False, False, False])
-
-for index in target2_team_ten_indexes:
-    if target2_team in index:
-        home_list[target2_team_ten_indexes.index(index)] = True
-
-first_game_df_2 = pd.DataFrame()
-second_game_df_2 = pd.DataFrame()
-third_game_df_2 = pd.DataFrame()
-fourth_game_df_2 = pd.DataFrame()
-fifth_game_df_2 = pd.DataFrame()
-sixth_game_df_2 = pd.DataFrame()
-seventh_game_df_2 = pd.DataFrame()
-eighth_game_df_2 = pd.DataFrame()
-ninth_game_df_2 = pd.DataFrame()
-tenth_game_df_2 = pd.DataFrame()
-
-first_game_df_2 = first_game_2.dataframe
-second_game_df_2 = second_game_2.dataframe
-third_game_df_2 = third_game_2.dataframe
-fourth_game_df_2 = fourth_game_2.dataframe
-fifth_game_df_2 = fifth_game_2.dataframe
-sixth_game_df_2 = sixth_game_2.dataframe
-seventh_game_df_2 = seventh_game_2.dataframe
-eighth_game_df_2 = eighth_game_2.dataframe
-ninth_game_df_2 = ninth_game_2.dataframe
-tenth_game_df_2 = tenth_game_2.dataframe
-
-
-first_game_df_2 = first_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-second_game_df_2 = second_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-third_game_df_2 = third_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-fourth_game_df_2 = fourth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-fifth_game_df_2 = fifth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-sixth_game_df_2 = sixth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-seventh_game_df_2 = seventh_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-eighth_game_df_2 = eighth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-ninth_game_df_2 = ninth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-tenth_game_df_2 = tenth_game_df_2.drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                'losing_name', 'losing_abbr', 'home_wins', 'away_wins',
-                                'date', 'location'])
-
-target2_ten_games_df = first_game_df_2
-target2_ten_games_df = target2_ten_games_df.append(second_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(third_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(fourth_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(fifth_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(sixth_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(seventh_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(eighth_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(ninth_game_df_2, ignore_index=True)
-target2_ten_games_df = target2_ten_games_df.append(tenth_game_df_2, ignore_index=True)
-
-for_game_list_2 = list([first_game_2, second_game_2, third_game_2, fourth_game_2, fifth_game_2, sixth_game_2, seventh_game_2, eighth_game_2, ninth_game_2, tenth_game_2])
-target2_ten_games_points_df = pd.DataFrame()
-
-for game in for_game_list_2:
-    target2_ten_games_points_df = target2_ten_games_points_df.append(game.dataframe[['home_points', 'away_points']], ignore_index=True)
-
-print('Gathered past 10 game stats and seperated points of team 2.')
-
-print('Running neural network.')
+        # compare dates and find previous specified number of game dates
+        index_counter = 0
 
+        for count in index_counts:
+            if index_counter == 0:
+                if current_date_count <= count:
+                    position = index_counts.index(count)
+
+                    # use index counts to find positions of boxscore indexes
+                    multiple_index_counts = index_counts
+                    multiple_index_counts = multiple_index_counts[((position) - self.n_games):(position)]
+                    index_counter = 1
+
+        # use index counts to find positions of boxscore indexes
+        multiple_positions = list()
+        multiple_indexes = list()
+
+        for index_count in multiple_index_counts:
+            multiple_positions.append(index_counts.index(index_count))
+
+        for position in multiple_positions:
+            multiple_indexes.append(indexes[position])
+
+        # use boxscore indexes to retreive each game's dataframe
+        boxscore_list = list()
+        dataframe_list = list()
+
+        for i in range(self.n_games):
+            boxscore_list.append(Boxscore(multiple_indexes[i]))
+
+            dataframe_list.append(boxscore_list[i].dataframe)
+
+            dataframe_list[i] = dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
+                                        'losing_name', 'losing_abbr', 'home_wins',
+                                        'away_wins', 'date', 'location'])
+
+        # label each column by the order that the game was played in
+        dataframe_column_list = list()
+        dataframe_value_list = list()
+        new_df_value_list = list()
+
+        for iterable, df in enumerate(dataframe_list):
+            for column in df:
+                df.rename(columns={column: (str(column) + str(iterable))}, inplace=True)
+                dataframe_column_list.append(str(column) + str(iterable))
+
+        for df in dataframe_list:
+            dataframe_value_list.append(df.values)
+
+        for iterable, arr in enumerate(dataframe_value_list):
+            dataframe_value_list[iterable] = arr.tolist()
+            new_df_value_list.extend(dataframe_value_list[iterable][0])
+
+        training_games_df = pd.DataFrame(columns=dataframe_column_list)
+
+        training_games_df.loc[0] = new_df_value_list
+
+        # separate the points scored (target data) into separate dataframes
+        target_points_df = pd.DataFrame()
+        df_columns = pd.DataFrame()
+        df_columns = training_games_df[['home_points' + str(self.n_games - 1), 'away_points' + str(self.n_games - 1)]]
+        target_points_df = target_points_df.append(df_columns, ignore_index=True, sort=False)
+        self.target_points = target_points_df
+
+        # filter out the most recent (target) game from the training data
+        training_games_df = training_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
+        self.training_games = training_games_df
+
+        print('Acquired last ' + str(self.n_games - 1) + ' game statistics of ' + self.name + ' in ' + str(current_year) + '.')
+
+
+# initial conditions to capture NBA data
+target_team_abbreviations = ['PHI', 'LAL']
+
+n_games = 10
+
+
+# gather dataframes for target teams
+for target_team in target_team_abbreviations:
+    # create a team class for every team and gather dataframes
+    current_team = Team(target_team, str(current_year))
+    current_team_name = current_team.name
+    current_team.gather_df(n_games)
+
+
+
+
+
+
+
+'''
 model_target1 = Sequential()
 
 model_target1.add(Dense(74, activation='relu', input_dim=73))
@@ -384,3 +222,4 @@ model = model_target1.fit(target1_ten_games_df, target1_ten_games_points_df, val
 predictedwins = model_target1.predict(target2_ten_games_df)
 
 print(predictedwins)
+'''

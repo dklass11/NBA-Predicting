@@ -219,12 +219,7 @@ class Team():
 
                     # use index counts to find positions of boxscore indexes
                     multiple_index_counts = index_counts
-
-                    try:
-                        multiple_index_counts = multiple_index_counts[((position) - self.n_games):(position)]
-                    except:
-                        date_generator()
-
+                    multiple_index_counts = multiple_index_counts[((position) - self.n_games):(position)]
                     index_counter = 1
 
         # use index counts to find positions of boxscore indexes
@@ -295,14 +290,14 @@ class Team():
 team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM',
                'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
-current_year = 1985 # as in the 2019-2020 season
+current_year = 2020 # as in the 2019-2020 season
 
 starting_year = 1985 # works for 1985 and later years (reference website doesn't support all stat categories before then)
 
 n_games = 10
 
 
-# gather multiple dataframes for different teams in same year
+# gather multiple dataframes for every team in each year
 for number_of_passes in range(1):
     for year in range(starting_year, (current_year + 1)):
         for team_abbr in team_abbrev:
