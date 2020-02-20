@@ -8,7 +8,7 @@ from datetime import date
 # import neural network model
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.optimizers import Adam
+from keras.optimizers import Nadam
 
 # import NBA data fetching module
 from sportsreference.nba.boxscore import Boxscore
@@ -219,17 +219,17 @@ for target_team in target_team_abbreviations:
 # setup and run neural network
 model = Sequential()
 
-model.add(Dense(731, input_dim=730))
-model.add(Dense(50, activation='tanh'))
-model.add(Dense(50, activation='tanh'))
-model.add(Dense(50, activation='tanh'))
-model.add(Dense(2, activation='tanh'))
+model.add(Dense(730, input_dim=730))
+model.add(Dense(100, activation='relu'))
+model.add(Dense(100, activation='relu'))
+model.add(Dense(100, activation='relu'))
+model.add(Dense(2, activation='softmax'))
 
-opt = Adam(learning_rate=0.0001, clipnorm=1)
+opt = Nadam()
 
 model.compile(optimizer=opt, loss='mean_squared_error')
 
-model.fit(training_games_df, training_points_df, validation_split=0.1, epochs=100, shuffle=True)
+model.fit(training_games_df, training_points_df, validation_split=0.25, epochs=100, shuffle=True)
 
 predicted_points = model.predict(target_games_df)
 
