@@ -266,6 +266,9 @@ class Team():
 
         training_games_df.loc[0] = new_df_value_list
 
+        training_games_df = training_games_df.fillna(0)
+
+
         # separate the points scored (target data) into separate dataframes
         target_points_df = pd.DataFrame()
         df_columns = pd.DataFrame()
@@ -290,7 +293,7 @@ class Team():
 team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM',
                'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
-current_year = 2020 # as in the 2019-2020 season
+current_year = 1985 # as in the 2019-2020 season
 
 starting_year = 1985 # works for 1985 and later years (reference website doesn't support all stat categories before then)
 

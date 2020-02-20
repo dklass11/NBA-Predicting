@@ -230,7 +230,7 @@ target_games_df_file.close()
 # setup and run neural network
 model = Sequential()
 
-model.add(Dense(730, input_dim=730))
+model.add(Dense(731, input_dim=730))
 model.add(Dense(100, activation='relu'))
 model.add(Dense(100, activation='relu'))
 model.add(Dense(100, activation='relu'))
@@ -240,7 +240,7 @@ opt = Nadam()
 
 model.compile(optimizer=opt, loss='mean_squared_error')
 
-model.fit(training_games_df, training_points_df, validation_split=0.25, epochs=100, shuffle=True)
+model.fit(training_games_df, training_points_df, validation_split=0.2, epochs=100)
 
 predicted_points = model.predict(target_games_df)
 
