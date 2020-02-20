@@ -231,16 +231,19 @@ target_games_df_file.close()
 model = Sequential()
 
 model.add(Dense(731, input_dim=730))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(2, activation='softmax'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(2))
 
 opt = Nadam()
 
-model.compile(optimizer=opt, loss='mean_squared_error')
+model.compile(optimizer=opt, loss='mean_squared_error', metrics=['accuracy'])
 
-model.fit(training_games_df, training_points_df, validation_split=0.2, epochs=100)
+model.fit(training_games_df, training_points_df, validation_split=0.2, epochs=1000)
 
 predicted_points = model.predict(target_games_df)
 
