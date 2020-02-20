@@ -8,6 +8,7 @@ from datetime import date
 # import neural network model
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.optimizers import Adam
 
 # import NBA data fetching module
 from sportsreference.nba.boxscore import Boxscore
@@ -19,6 +20,7 @@ boxscore_year = ''
 current_team_name = ''
 current_date_count = 0
 target_games_df = pd.DataFrame()
+dataframe_bool = False
 
 # load in training pickle files
 games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
@@ -35,6 +37,7 @@ if str(date.today())[5:7] == '11' or str(date.today())[5:7] == '12':
 
 else:
     current_year = str(date.today())[:4]
+
 
 # convert current date to count to be used to compare against game schedule
 def dateconverter(date):
@@ -157,8 +160,8 @@ class Team():
             dataframe_list.append(boxscore_list[i].dataframe)
 
             dataframe_list[i] = dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                        'losing_name', 'losing_abbr', 'home_wins',
-                                        'away_wins', 'date', 'location'])
+                                                                'losing_name', 'losing_abbr', 'home_wins',
+                                                                'away_wins', 'date', 'location'])
 
         # label each column by the order that the game was played in
         dataframe_column_list = list()
@@ -177,13 +180,25 @@ class Team():
             dataframe_value_list[iterable] = arr.tolist()
             new_df_value_list.extend(dataframe_value_list[iterable][0])
 
-        target_games_df = pd.DataFrame(columns=dataframe_column_list)
+        # add values from first and second team to target games dataframe
+        global target_games_df
+        global dataframe_bool
 
-        target_games_df.loc[0] = new_df_value_list
+        if dataframe_bool == False:
+            target_games_df = pd.DataFrame(columns=dataframe_column_list)
+            target_games_df.loc[0] = new_df_value_list
+
+            dataframe_bool = True
+
+        else:
+            target_games_df.loc[1] = new_df_value_list
+
+            dataframe_bool = False
 
         # filter out the most recent (target) game from the training data
-        target_games_df = target_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
-        self.target_games = target_games_df
+        if dataframe_bool == False:
+            target_games_df = target_games_df.filter(regex=r'.*(?<!' + str(self.n_games - 1) + ')$')
+            self.target_games = target_games_df
 
         print('Acquired last ' + str(self.n_games - 1) + ' game statistics of ' + self.name + ' in ' + str(current_year) + '.')
 
@@ -204,17 +219,17 @@ for target_team in target_team_abbreviations:
 # setup and run neural network
 model = Sequential()
 
-model.add(Dense(731, activation='relu', input_dim=730))
-model.add(Dense(1000, activation='relu'))
-model.add(Dense(1000, activation='relu'))
-model.add(Dense(1000, activation='relu'))
-model.add(Dense(1000, activation='relu'))
-model.add(Dense(1000, activation='relu'))
-model.add(Dense(2))
+model.add(Dense(731, input_dim=730))
+model.add(Dense(50, activation='tanh'))
+model.add(Dense(50, activation='tanh'))
+model.add(Dense(50, activation='tanh'))
+model.add(Dense(2, activation='tanh'))
 
-model.compile(optimizer='adam', loss='mean_squared_error')
+opt = Adam(learning_rate=0.0001, clipnorm=1)
 
-model.fit(training_games_df, training_points_df, validation_split=0.1, epochs=1000, shuffle=True)
+model.compile(optimizer=opt, loss='mean_squared_error')
+
+model.fit(training_games_df, training_points_df, validation_split=0.1, epochs=100, shuffle=True)
 
 predicted_points = model.predict(target_games_df)
 

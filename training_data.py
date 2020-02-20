@@ -242,8 +242,8 @@ class Team():
             dataframe_list.append(boxscore_list[i].dataframe)
 
             dataframe_list[i] = dataframe_list[i].drop(columns=['winning_name', 'winning_abbr', 'winner',
-                                        'losing_name', 'losing_abbr', 'home_wins',
-                                        'away_wins', 'date', 'location'])
+                                                                'losing_name', 'losing_abbr', 'home_wins',
+                                                                'away_wins', 'date', 'location'])
 
         # label each column by the order that the game was played in
         dataframe_column_list = list()
