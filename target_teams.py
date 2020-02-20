@@ -13,15 +13,15 @@ from keras.optimizers import Nadam
 # import NBA data fetching module
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
-
-
+target_games_df = pd.DataFrame()
+'''
 # initialize any needed variables
 boxscore_year = ''
 current_team_name = ''
 current_date_count = 0
 target_games_df = pd.DataFrame()
 dataframe_bool = False
-
+'''
 # load in training pickle files
 games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
 training_games_df = pickle.load(games_pickle_file)
@@ -30,7 +30,7 @@ games_pickle_file.close()
 points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
 training_points_df = pickle.load(points_pickle_file)
 points_pickle_file.close()
-
+'''
 # get current year
 if str(date.today())[5:7] == '11' or str(date.today())[5:7] == '12':
     current_year = str(int(str(date.today())[:4] + 1))
@@ -73,7 +73,7 @@ def dateconverter(date):
 
 class Team():
 
-    '''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. '''
+    ''''''Creates a Team class that stores the schedule of games and boxscore indexes of each selected team for the given year. ''''''
 
     def __init__(self, team, year):
         self.name = team
@@ -214,6 +214,17 @@ for target_team in target_team_abbreviations:
     current_team = Team(target_team, str(current_year))
     current_team_name = current_team.name
     current_team.gather_df(n_games)
+
+
+games_df_pickle = open('games_df.txt', 'wb')
+pickle.dump(target_games_df, games_df_pickle)
+games_df_pickle.close()
+'''
+
+
+target_games_df_file = open('games_df.txt', 'rb')
+target_games_df = pickle.load(target_games_df_file)
+target_games_df_file.close()
 
 
 # setup and run neural network
