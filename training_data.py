@@ -293,7 +293,7 @@ class Team():
 team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM',
                'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
-current_year = 1985 # as in the 2019-2020 season
+current_year = 2020 # as in the 2019-2020 season
 
 starting_year = 1985 # works for 1985 and later years (reference website doesn't support all stat categories before then)
 
@@ -302,7 +302,7 @@ n_games = 10
 
 # gather multiple dataframes for every team in each year
 for number_of_passes in range(1):
-    for year in range(starting_year, (current_year + 1)):
+    for year in rand.sample(range(starting_year, (current_year + 1)), ((current_year + 1) - starting_year)):
         for team_abbr in team_abbrev:
             # adjust team abbreviations to comply with sports reference database for specified year
             if year <= 2012:
@@ -382,23 +382,24 @@ for number_of_passes in range(1):
             current_team_name = current_team.name
             current_team.gather_df(n_games)
 
+
+        # add generated dates to pickle file
+        date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
+        pickle.dump(random_date_list, date_pickle_file)
+        date_pickle_file.close()
+
+        # add acquired games dataframe to pickle file
+        games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
+        pickle.dump(loaded_games_df, games_pickle_file)
+        games_pickle_file.close()
+
+        # add acquired points dataframe to pickle file
+        points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
+        pickle.dump(loaded_points_df, points_pickle_file)
+        points_pickle_file.close()
+
+
         print('----------')
-
-
-# add generated dates to pickle file
-date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
-pickle.dump(random_date_list, date_pickle_file)
-date_pickle_file.close()
-
-# add acquired games dataframe to pickle file
-games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
-pickle.dump(loaded_games_df, games_pickle_file)
-games_pickle_file.close()
-
-# dd acquired points dataframe to pickle file
-points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
-pickle.dump(loaded_points_df, points_pickle_file)
-points_pickle_file.close()
 
 
 print('Gathered all specified dataframes.')
