@@ -301,7 +301,7 @@ n_games = 10
 
 
 # gather multiple dataframes for every team in each year
-for number_of_passes in range(1):
+while(True):
     for year in rand.sample(range(starting_year, (current_year + 1)), ((current_year + 1) - starting_year)):
         for team_abbr in team_abbrev:
             # adjust team abbreviations to comply with sports reference database for specified year
