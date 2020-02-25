@@ -4,10 +4,6 @@ import pandas as pd
 import random as rand
 import pickle
 
-# import neural network model
-from keras.models import Sequential
-from keras.layers import Dense
-
 # import NBA data fetching module
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
