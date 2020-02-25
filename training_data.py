@@ -28,7 +28,6 @@ try:
 
 except:
     random_date_list = list()
-    pass
 
 # retreive training games pickle file
 loaded_games_df = pd.DataFrame()
