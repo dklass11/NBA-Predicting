@@ -65,7 +65,7 @@ def date_generator():
             month = '12'
 
         # generate a random day based on month
-        if month == '01' or month == '03' or month == '12':
+        if month != '02':
             day = rand.randint(1, 31)
 
             if day in range(1, 10):
@@ -74,16 +74,8 @@ def date_generator():
             else:
                 day = str(day)
 
-        elif month == '02':
-            day = rand.randint(1, 28)
-
-            if day in range(1, 10):
-                day = '0' + str(day)
-            else:
-                day = str(day)
-
         else:
-            day = rand.randint(1, 30)
+            day = rand.randint(1, 28)
 
             if day in range(1, 10):
                 day = '0' + str(day)
@@ -377,9 +369,13 @@ while(True):
                 team_abbrev[29] = 'WAS'
 
             # create a team class for every team and gather dataframes
-            current_team = Team(team_abbr, str(year))
-            current_team_name = current_team.name
-            current_team.gather_df(n_games)
+            try:
+                current_team = Team(team_abbr, str(year))
+                current_team_name = current_team.name
+                current_team.gather_df(n_games)
+
+            except:
+                continue
 
 
         # add generated dates to pickle file
@@ -399,6 +395,3 @@ while(True):
 
 
         print('----------')
-
-
-print('Gathered all specified dataframes.')
