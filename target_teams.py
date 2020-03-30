@@ -22,11 +22,11 @@ target_games_df = pd.DataFrame()
 dataframe_bool = False
 '''
 # load in training pickle files
-games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
+games_pickle_file = open('NBA-Predicting\\pickle_files\\games_df_pickle.txt', 'rb')
 training_games_df = pickle.load(games_pickle_file)
 games_pickle_file.close()
 
-points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
+points_pickle_file = open('NBA-Predicting\\pickle_files\\points_df_pickle.txt', 'rb')
 training_points_df = pickle.load(points_pickle_file)
 points_pickle_file.close()
 '''
@@ -221,7 +221,7 @@ games_df_pickle.close()
 '''
 
 
-target_games_df_file = open('games_df.txt', 'rb')
+target_games_df_file = open('NBA-Predicting\\games_df.txt', 'rb')
 target_games_df = pickle.load(target_games_df_file)
 target_games_df_file.close()
 

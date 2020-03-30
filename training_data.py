@@ -18,7 +18,7 @@ random_date_count = 0
 
 # retreive training date pickle file
 try:
-    date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'rb')
+    date_pickle_file = open('NBA-Predicting\\pickle_files\\training_date_pickle.txt', 'rb')
     random_date_list = pickle.load(date_pickle_file)
     date_pickle_file.close()
 
@@ -29,7 +29,7 @@ except:
 loaded_games_df = pd.DataFrame()
 
 try:
-    games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'rb')
+    games_pickle_file = open('NBA-Predicting\\pickle_files\\games_df_pickle.txt', 'rb')
     loaded_games_df = pickle.load(games_pickle_file)
     games_pickle_file.close()
 
@@ -40,7 +40,7 @@ except:
 loaded_points_df = pd.DataFrame()
 
 try:
-    points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'rb')
+    points_pickle_file = open('NBA-Predicting\\pickle_files\\points_df_pickle.txt', 'rb')
     loaded_points_df = pickle.load(points_pickle_file)
     points_pickle_file.close()
 
@@ -375,17 +375,17 @@ while(True):
 
 
         # add generated dates to pickle file
-        date_pickle_file = open('pickle_files\\training_date_pickle.txt', 'wb')
+        date_pickle_file = open('NBA-Predicting\\pickle_files\\training_date_pickle.txt', 'wb')
         pickle.dump(random_date_list, date_pickle_file)
         date_pickle_file.close()
 
         # add acquired games dataframe to pickle file
-        games_pickle_file = open('pickle_files\\games_df_pickle.txt', 'wb')
+        games_pickle_file = open('NBA-Predicting\\pickle_files\\games_df_pickle.txt', 'wb')
         pickle.dump(loaded_games_df, games_pickle_file)
         games_pickle_file.close()
 
         # add acquired points dataframe to pickle file
-        points_pickle_file = open('pickle_files\\points_df_pickle.txt', 'wb')
+        points_pickle_file = open('NBA-Predicting\\pickle_files\\points_df_pickle.txt', 'wb')
         pickle.dump(loaded_points_df, points_pickle_file)
         points_pickle_file.close()
 
