@@ -12,7 +12,6 @@ from keras.layers import Dense
 # import NBA data fetching module
 from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
-target_games_df = pd.DataFrame()
 '''
 # initialize any needed variables
 boxscore_year = ''
@@ -203,7 +202,7 @@ class Team():
 
 
 # initial conditions to capture NBA data
-target_team_abbreviations = ['PHI', 'LAL']
+target_team_abbreviations = ['LAL', 'CLE']
 
 n_games = 10
 
@@ -215,12 +214,7 @@ for target_team in target_team_abbreviations:
     current_team.gather_df(n_games)
 
 
-games_df_pickle = open('games_df.txt', 'wb')
-pickle.dump(target_games_df, games_df_pickle)
-games_df_pickle.close()
 '''
-
-
 target_games_df_file = open('NBA-Predicting\\games_df.txt', 'rb')
 target_games_df = pickle.load(target_games_df_file)
 target_games_df_file.close()
