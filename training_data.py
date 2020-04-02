@@ -9,6 +9,14 @@ from sportsreference.nba.boxscore import Boxscore
 from sportsreference.nba.schedule import Schedule
 
 
+# initial conditions to capture NBA data
+team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL','MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
+
+current_year = 2020 # as in the 2019-2020 season
+starting_year = 1985 # works for 1985 and later years (reference website doesn't support years before then)
+n_games = 10
+
+
 # initialize any needed variables
 boxscore_year = ''
 random_date = ''
@@ -274,17 +282,6 @@ class Team():
         loaded_points_df = loaded_points_df.append(target_points_df, ignore_index=True, sort=False)
 
         print('Acquired last ' + str(self.n_games - 1) + ' game statistics of ' + self.name + ' in ' + str(year) + '.')
-
-
-# initial conditions to capture NBA data
-team_abbrev = ['ATL', 'BOS', 'BRK', 'CHI', 'CHO', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM',
-               'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHO', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
-
-current_year = 2020 # as in the 2019-2020 season
-
-starting_year = 1985 # works for 1985 and later years (reference website doesn't support all stat categories before then)
-
-n_games = 10
 
 
 # gather multiple dataframes for every team in each year
