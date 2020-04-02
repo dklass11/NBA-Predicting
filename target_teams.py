@@ -15,7 +15,7 @@ from sportsreference.nba.schedule import Schedule
 
 
 # initial conditions to capture NBA data
-target_team_abbreviations = ['LAL', 'CLE']
+target_team_abbreviations = ['HOU', 'MIN']
 n_games = 10
 acquired_games = False
 current_date = False
