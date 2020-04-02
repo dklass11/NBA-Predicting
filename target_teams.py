@@ -232,7 +232,7 @@ model.add(Dense(2))
 
 model.compile(optimizer='rmsprop', loss='mse', metrics=['mae'])
 
-model.fit(training_games_df, training_points_df, validation_split=0.2, epochs=500, batch_size=256)
+model.fit(training_games_df, training_points_df, validation_split=0.15, epochs=500, batch_size=64)
 
 predicted_points = model.predict(target_games_df)
 
