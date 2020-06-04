@@ -48,7 +48,7 @@ if acquired_games == False:
 
         else:
             current_year = str(date.today())[:4]
-    
+
     else:
         current_year = '2020'
 
@@ -100,7 +100,7 @@ if acquired_games == False:
             if current_date == True:
                 global current_date_count
                 current_date_count = dateconverter(str(date.today()))
-            
+
             else:
                 current_date_count = dateconverter('2020-03-10')
 
